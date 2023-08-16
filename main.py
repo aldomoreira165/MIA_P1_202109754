@@ -1,5 +1,6 @@
 import argparse
-from disco import crearDisco, establecerEspacioDisco, eliminarDisco
+from disco import crearDisco, establecerEspacioDisco, eliminarDisco, escribirDisco
+from mbr import Mbr
 
 #para case insensitive
 class CaseInsensitiveArgumentParser(argparse.ArgumentParser):
@@ -8,8 +9,19 @@ class CaseInsensitiveArgumentParser(argparse.ArgumentParser):
 
 def execute_mkdisk(args):
     if args.size > 0:
+        #creando disco
         discoCreado = crearDisco(args.path)
-        #establecerEspacioDisco(discoCreado, args.size, args.unit)
+
+        #creando espacio de disco
+        establecerEspacioDisco(discoCreado, args.size, args.unit)
+
+        #creando mbr de disco
+        mbr = Mbr()
+        mbr.set_infomation(args.size)
+
+        #generando objeto mbr en el disco
+        escribirDisco(discoCreado, 0, mbr)
+
         discoCreado.close()
     else:
         print("Error: El tamaño del disco debe ser positivo y mayor que 0.")
