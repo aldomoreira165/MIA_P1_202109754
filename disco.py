@@ -35,18 +35,18 @@ def establecerEspacioDisco(archivo, espacio, unidad):
     for i in range(times_to_write):
         archivo.write(buffer)
 
-    print("Espacio establecido correctamente")
+    #print("Espacio establecido correctamente")
 
 
 def escribirDisco(archivo, desplazamiento, objeto):
-    print("Escribiendo en: ", desplazamiento)
+    #print("Escribiendo en: ", desplazamiento)
     datos = objeto.doSerialize()
     archivo.seek(desplazamiento)
     archivo.write(datos)
 
 def leerDisco(archivo, desplazamiento,objeto):
     try:
-        print("Reading in: ", desplazamiento)
+        #print("Reading in: ", desplazamiento)
         #print("Size: ",  ctypes.sizeof(obj))
         archivo.seek(desplazamiento)
         data = archivo.read(len(objeto.doSerialize()))

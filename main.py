@@ -28,6 +28,16 @@ def execute_mkdisk(args):
         leerDisco(discoCreado, 0, mbrDEs)
         mbrDEs.display_info()
 
+        print("====particiones======")
+        print("----particion 1 -----")
+        mbrDEs.particion1.display_info()
+        print("----particion 2 -----")
+        mbrDEs.particion2.display_info()
+        print("----particion 3 -----")
+        mbrDEs.particion3.display_info()
+        print("----particion 4 -----")
+        mbrDEs.particion4.display_info()
+
         discoCreado.close()
     else:
         print("Error: El tamaño del disco debe ser positivo y mayor que 0.")
