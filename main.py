@@ -1,6 +1,7 @@
 import argparse
-from disco import crearDisco, establecerEspacioDisco, eliminarDisco, escribirDisco
+from disco import crearDisco, establecerEspacioDisco, eliminarDisco, escribirDisco, leerDisco
 from mbr import Mbr
+
 
 #para case insensitive
 class CaseInsensitiveArgumentParser(argparse.ArgumentParser):
@@ -17,10 +18,15 @@ def execute_mkdisk(args):
 
         #creando mbr de disco
         mbr = Mbr()
-        mbr.set_infomation(args.size)
+        mbr.set_infomation(args.size, args.fit)
 
         #generando objeto mbr en el disco
         escribirDisco(discoCreado, 0, mbr)
+        
+        #leer 
+        mbrDEs = Mbr()
+        leerDisco(discoCreado, 0, mbrDEs)
+        mbrDEs.display_info()
 
         discoCreado.close()
     else:
@@ -31,7 +37,7 @@ def execute_rmdisk(args):
     if confirmacion == "s":
         eliminarDisco(args.path)
     else:
-        print("Eliminacion de disco cancelada")
+        print("Eliminacion de disco cancelada") 
     
 
 def main():

@@ -6,7 +6,7 @@ def crearDisco(nombre):
         makedirs(path.dirname(nombre), exist_ok=True)
 
         #creando el archivo en modo binario de escritura
-        fileOpen = open(nombre, "wb")  # Open the file in write mode
+        fileOpen = open(nombre, "wb+")  # Open the file in write mode
         print("Disco creado correctamente")
         return fileOpen
     except Exception as e:
@@ -43,3 +43,14 @@ def escribirDisco(archivo, desplazamiento, objeto):
     datos = objeto.doSerialize()
     archivo.seek(desplazamiento)
     archivo.write(datos)
+
+def leerDisco(archivo, desplazamiento,objeto):
+    try:
+        print("Reading in: ", desplazamiento)
+        #print("Size: ",  ctypes.sizeof(obj))
+        archivo.seek(desplazamiento)
+        data = archivo.read(len(objeto.doSerialize()))
+        #print("Size data: ",  len(data))
+        objeto.doDeserialize(data)
+    except Exception as e:
+        print(f"Error reading object err: {e}")
