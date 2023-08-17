@@ -1,6 +1,7 @@
+import os
 import argparse
-from disco import crearDisco, establecerEspacioDisco, eliminarDisco, escribirDisco, leerDisco
 from mbr import Mbr
+from disco import crearDisco, establecerEspacioDisco, eliminarDisco, escribirDisco, leerDisco
 
 
 #para case insensitive
@@ -10,35 +11,40 @@ class CaseInsensitiveArgumentParser(argparse.ArgumentParser):
 
 def execute_mkdisk(args):
     if args.size > 0:
-        #creando disco
-        discoCreado = crearDisco(args.path)
 
-        #creando espacio de disco
-        establecerEspacioDisco(discoCreado, args.size, args.unit)
+        try:
+            #creando disco
+            discoCreado = crearDisco(args.path)
 
-        #creando mbr de disco
-        mbr = Mbr()
-        mbr.set_infomation(args.size, args.fit)
+            #creando espacio de disco
+            establecerEspacioDisco(discoCreado, args.size, args.unit)
 
-        #generando objeto mbr en el disco
-        escribirDisco(discoCreado, 0, mbr)
-        
-        #leer 
-        mbrDEs = Mbr()
-        leerDisco(discoCreado, 0, mbrDEs)
-        mbrDEs.display_info()
+            #creando mbr de disco
+            mbr = Mbr()
+            mbr.set_infomation(args.size, args.fit)
 
-        print("====particiones======")
-        print("----particion 1 -----")
-        mbrDEs.particion1.display_info()
-        print("----particion 2 -----")
-        mbrDEs.particion2.display_info()
-        print("----particion 3 -----")
-        mbrDEs.particion3.display_info()
-        print("----particion 4 -----")
-        mbrDEs.particion4.display_info()
+            #generando objeto mbr en el disco
+            escribirDisco(discoCreado, 0, mbr)
+            
+            #leer 
+            mbrDEs = Mbr()
+            leerDisco(discoCreado, 0, mbrDEs)
+            mbrDEs.display_info()
 
-        discoCreado.close()
+            print("====particiones======")
+            print("----particion 1 -----")
+            mbrDEs.particion1.set_status("A")
+            mbrDEs.particion1.display_info()
+            print("----particion 2 -----")
+            mbrDEs.particion2.display_info()
+            print("----particion 3 -----")
+            mbrDEs.particion3.display_info()
+            print("----particion 4 -----")
+            mbrDEs.particion4.display_info()
+
+            discoCreado.close()
+        except Exception as e:
+            print(f"Error configurando disco: {e}")
     else:
         print("Error: El tamaño del disco debe ser positivo y mayor que 0.")
         
@@ -48,34 +54,54 @@ def execute_rmdisk(args):
         eliminarDisco(args.path)
     else:
         print("Eliminacion de disco cancelada") 
-    
 
+
+def execute_fdisk(args):
+    if args.size > 0:
+        with open(args.name, "xb+") as disco:
+            print("ola")
+    else:
+        print("Error: El tamaño de la particion debe ser positivo y mayor que 0.")
+
+    
 def main():
     parser = CaseInsensitiveArgumentParser(description="Analizador de comandos")
 
-
     subparsers = parser.add_subparsers(dest="command", help="Comando a ejecutar")
 
-    #mkdisk
-    mkdisk_parser = subparsers.add_parser("mkdisk", help="Crear disco")   
+    # Nuevo comando "execute"
+    execute_parser = subparsers.add_parser("execute", help="Ejecutar comando execute")
+    execute_parser.add_argument("-path", required=True, help="Ruta del archivo a abrir")
+
+    # mkdisk
+    mkdisk_parser = subparsers.add_parser("mkdisk", help="Crear disco")
     mkdisk_parser.add_argument("-size", required=True, type=int, help="Tamaño del disco")
     mkdisk_parser.add_argument("-path", required=True, help="Ruta donde se creará el disco")
     mkdisk_parser.add_argument("-fit", required=False, choices=["BF", "FF", "WF"], default="FF",help="Tipo de ajuste de disco (opcional)")
     mkdisk_parser.add_argument("-unit", required=False, choices=["K", "M"], default="M", help="Unidad de tamaño (opcional)")
 
-    #rmdisk
+    # rmdisk
     rmdisk_parser = subparsers.add_parser("rmdisk", help="Eliminar disco duro")
     rmdisk_parser.add_argument("-path", required=True, help="Ruta donde se encuentra el disco a eliminar")
 
     args = parser.parse_args()
 
-    if args.command == "mkdisk":
-        execute_mkdisk(args)
-    elif args.command == "rmdisk":
-        execute_rmdisk(args)
+    if args.command == "execute":
+        if os.path.exists(args.path):
+            with open(args.path, 'r') as file:
+                for line in file:
+                    if "mkdisk" in line:
+                        # Crear un nuevo objeto args para mkdisk
+                        mkdisk_args = mkdisk_parser.parse_args(line.split()[1:])
+                        execute_mkdisk(mkdisk_args)
+                    elif "rmdisk" in line:
+                        # Crear un nuevo objeto args para rmdisk
+                        rmdisk_args = rmdisk_parser.parse_args(line.split()[1:])
+                        execute_rmdisk(rmdisk_args)
+        else:
+            print(f"El archivo {args.path} no existe.")
     else:
         print("Comando desconocido")
-
 
 
 if __name__ == "__main__":

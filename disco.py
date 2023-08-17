@@ -2,13 +2,15 @@ from os import remove, path, makedirs
 
 def crearDisco(nombre):
     try:
-        #creando las carpetas en caso no existan
+        # Creando las carpetas en caso no existan
         makedirs(path.dirname(nombre), exist_ok=True)
 
-        #creando el archivo en modo binario de escritura
-        fileOpen = open(nombre, "wb+")  # Open the file in write mode
+        # Creando el archivo en modo binario de escritura (modo "xb")
+        fileOpen = open(nombre, "xb")
         print("Disco creado correctamente")
         return fileOpen
+    except FileExistsError:
+        print(f"El archivo '{nombre}' ya existe.")
     except Exception as e:
         print(f"Error creando disco: {e}")
 
