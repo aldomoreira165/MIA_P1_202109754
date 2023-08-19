@@ -41,18 +41,24 @@ def establecerEspacioDisco(archivo, espacio, unidad):
 
 
 def escribirDisco(archivo, desplazamiento, objeto):
-    #print("Escribiendo en: ", desplazamiento)
-    datos = objeto.doSerialize()
-    archivo.seek(desplazamiento)
-    archivo.write(datos)
-
-def leerDisco(archivo, desplazamiento,objeto):
     try:
-        #print("Reading in: ", desplazamiento)
-        #print("Size: ",  ctypes.sizeof(obj))
+        #print("Escribiendo en: ", desplazamiento)
+        datos = objeto.doSerialize()
         archivo.seek(desplazamiento)
-        data = archivo.read(len(objeto.doSerialize()))
-        #print("Size data: ",  len(data))
-        objeto.doDeserialize(data)
+        archivo.write(datos)
+        print("escritura correcta")
     except Exception as e:
-        print(f"Error reading object err: {e}")
+        print(f"Error en escritura disco: {e}")
+
+def leerDisco(nombre, desplazamiento,objeto):
+    with open(nombre, "rb") as fileOpen:
+        try:
+            #print("Reading in: ", desplazamiento)
+            #print("Size: ",  ctypes.sizeof(obj))
+            fileOpen.seek(desplazamiento)
+            data = fileOpen.read(len(objeto.doSerialize()))
+            #print("Size data: ",  len(data))
+            objeto.doDeserialize(data)
+            print("lectura correcta")
+        except Exception as e:
+            print(f"Error reading object err: {e}")

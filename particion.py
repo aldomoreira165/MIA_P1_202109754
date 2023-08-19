@@ -30,7 +30,7 @@ class Particion(ctypes.Structure):
         self.type = coding_str(type, 1)
 
     def set_fit(self, fit):
-        self.status = coding_str(fit, 1)
+        self.fit = coding_str(fit, 1)
     
     def set_start(self, start):
         self.start = start

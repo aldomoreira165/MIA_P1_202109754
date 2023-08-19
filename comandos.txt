@@ -1,1 +1,2 @@
 mkdisk -size=10 -path=./disco.dsk
+fdisk -size=10 -path=./disco.dsk -name="particionNueva"
