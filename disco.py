@@ -40,7 +40,7 @@ def establecerEspacioDisco(archivo, espacio, unidad):
     #print("Espacio establecido correctamente")
 
 
-def escribirDisco(archivo, desplazamiento, objeto):
+def generarDatosDisco(archivo, desplazamiento, objeto):
     try:
         #print("Escribiendo en: ", desplazamiento)
         datos = objeto.doSerialize()
@@ -50,7 +50,7 @@ def escribirDisco(archivo, desplazamiento, objeto):
     except Exception as e:
         print(f"Error en escritura disco: {e}")
 
-def leerDisco(nombre, desplazamiento,objeto):
+def obtenerDatosDisco(nombre, desplazamiento,objeto):
     with open(nombre, "rb") as fileOpen:
         try:
             #print("Reading in: ", desplazamiento)
