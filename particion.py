@@ -52,6 +52,9 @@ class Particion(ctypes.Structure):
     def get_const(self):
         return const
     
+    def get_name(self):
+        return self.name
+    
     def display_info(self):
         print(f"status: {self.status}")
         print(f"type: {self.type}")

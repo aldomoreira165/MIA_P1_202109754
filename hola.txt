@@ -1,4 +1,7 @@
 mkdisk -size=10 -path=./disco.dsk
-fdisk -size=10 -path=./disco.dsk -name="particionNueva"
-fdisk -size=20 -path=./disco.dsk -name="particionDos"
-fdisk -size=30 -path=./disco.dsk -name="particionTres"
+fdisk -size=1000 -unit=B -path=./disco.dsk -name=particionNueva
+fdisk -size=1000 -unit=B -path=./disco.dsk -name=particionDos
+fdisk -size=1000 -unit=B -path=./disco.dsk -name=particionTres
+fdisk -size=1000 -unit=B -path=./disco.dsk -name=particionTres
+fdisk -size=1000 -unit=B -path=./disco.dsk -name=particionCuatro
+fdisk -size=1000 -unit=B -path=./disco.dsk -name=particionCinco

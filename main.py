@@ -38,7 +38,10 @@ def main():
     fdisk_parser.add_argument("-unit", required=False, choices=["B","K", "M"], default="K", help="Unidad de tamaño (opcional)")
     fdisk_parser.add_argument("-fit", required=False, choices=["BF", "FF", "WF"], default="WF",help="Tipo de ajuste de disco (opcional)")
 
-
+    #mount
+    mount_parser = subparsers.add_parser("mount", help="Montar particion")
+    mount_parser.add_argument("-path", required=True, help="Ruta del disco a montar")
+    mount_parser.add_argument("-name", required=True, help="Nombre de la particion a cargar")
 
     args = parser.parse_args()
 
@@ -58,6 +61,10 @@ def main():
                         # Crear un nuevo objeto args para rmdisk
                         fdisk_args = fdisk_parser.parse_args(line.split()[1:])
                         execute_fdisk(fdisk_args)
+                    elif "mount" in line:
+                        # Crear un nuevo objeto args para rmdisk
+                        mount_args = mount_parser.parse_args(line.split()[1:])
+                        execute_mount(mount_args)
         else:
             print(f"El archivo {args.path} no existe.")
     else:
