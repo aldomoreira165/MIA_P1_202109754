@@ -1,7 +1,9 @@
 import os
-import ctypes
 from elementos.mbr import Mbr
 from elementos.disco import *
+from funciones.utilities import coding_str
+
+particiones_montadas = []
 
 def execute_mkdisk(args):
     if args.size > 0:
@@ -191,6 +193,68 @@ def actualizarParticionesMBR(rutaDisco, mbr):
     disco.close()
 
 def execute_mount(args):
-    pass
+    if os.path.exists(args.path):
+        mbrDisco = Mbr()
+
+        #obteniendo datos del mbr
+        obtenerDatosDisco(args.path, 0, mbrDisco)
+
+        digitos_carnet = "54"
+        nombre_disco = os.path.splitext(os.path.basename(args.path))[0]
+        nombre_buscar = "b'" + args.name + "'"
+
+        #buscar la particion a cargar en base al nombre
+        if str(mbrDisco.particion1.get_name()) == nombre_buscar:
+            numero_particion = "1"
+            id_particion = digitos_carnet + numero_particion + nombre_disco
+            if id_particion in particiones_montadas:
+                print("Error: particion ya montada")
+            else:
+                particiones_montadas.append(id_particion)
+                print("Particion montada correctamente")
+                print("Pariciones montadas: ", particiones_montadas)
+        elif str(mbrDisco.particion2.get_name()) == nombre_buscar: 
+            numero_particion = "2"
+            id_particion = digitos_carnet + numero_particion + nombre_disco
+            if id_particion in particiones_montadas:
+                print("Error: particion ya montada")
+            else:
+                particiones_montadas.append(id_particion)
+                print("Particion montada correctamente")
+                print("Pariciones montadas: ", particiones_montadas)
+        elif str(mbrDisco.particion3.get_name()) == nombre_buscar:
+            numero_particion = "3"
+            id_particion = digitos_carnet + numero_particion + nombre_disco
+            if id_particion in particiones_montadas:
+                print("Error: particion ya montada")
+            else:
+                particiones_montadas.append(id_particion)
+                print("Particion montada correctamente")
+                print("Pariciones montadas: ", particiones_montadas)
+        elif str(mbrDisco.particion4.get_name()) == nombre_buscar:
+            numero_particion = "4"
+            id_particion = digitos_carnet + numero_particion + nombre_disco
+            if id_particion in particiones_montadas:
+                print("Error: particion ya montada")
+            else:
+                particiones_montadas.append(id_particion)
+                print("Particion montada correctamente")
+                print("Pariciones montadas: ", particiones_montadas)
+        else:
+            print("Error: particion no encontrada")
+
+    else:
+        print("Error: El disco no existe.")
+
+def execute_unmount(args):
+    id = args.id
+
+    if id in particiones_montadas:
+        particiones_montadas.remove(id)
+        print("Particion desmontada correctamente")
+        print("Pariciones montadas: ", particiones_montadas)
+    else:
+        print("Error: particion no montada")
+
 
 #python main.py execute -path=./hola.txt

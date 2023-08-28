@@ -1,4 +1,5 @@
 import re
+import os
 import argparse
 import shlex
 from funciones.utilities import printConsole,printError
@@ -21,7 +22,11 @@ def AnalyzeType(entry):
         printConsole("Analizando comando: " + entry)
         split_args = shlex.split(entry)
         command = split_args.pop(0)
-        if(command == "mkdisk"):
+        if (command == "execute"):
+            print(" ------ Se detecto execute ------ ")
+            fn_execute(split_args)
+            print(" ------ Termino execute ------ ")
+        elif(command == "mkdisk"):
             print(" ------ Se detecto mkdisk ------ ")
             fn_mkdisk(split_args)
             print(" ------ Termino mkdisk ------ ")
@@ -37,8 +42,44 @@ def AnalyzeType(entry):
             print(" ------ Se detecto mount ------ ")
             fn_mount(split_args)
             print(" ------ Termino mount ------ ")
-
+        elif(command == "unmount"):
+            print(" ------ Se detecto unmount ------ ")
+            fn_unmount(split_args)
+            print(" ------ Termino unmount ------ ")
     except Exception as e: pass
+
+def fn_execute(split_args):
+    try:
+        parser = argparse.ArgumentParser(description="Parámetros")
+        parser.add_argument("-path", required=True, help="Ruta del archivo a ejecutar")
+        args = parser.parse_args(split_args)
+
+        if os.path.exists(args.path):
+            with open(args.path, 'r') as file:
+                for line in file:
+                    line = line.strip()  # Eliminar espacios en blanco al principio y al final
+                    if line:  # Saltar líneas vacías
+                        command_args = shlex.split(line)
+                        command = command_args[0]
+                        args = command_args[1:]
+
+                        if command == "mkdisk":
+                            execute_mkdisk(args)
+                        elif command == "rmdisk":
+                            execute_rmdisk(args)
+                        elif command == "fdisk":
+                            execute_fdisk(args)
+                        elif command == "mount":
+                            execute_mount(args)
+                        elif command == "unmount":
+                            execute_unmount(args)
+                        # Agregar más comandos aquí según sea necesario
+
+        else:
+            print(f"El archivo {args.path} no existe.")
+
+    except SystemExit: printError("Análisis de argumentos")
+    except Exception as e: printError(str(e))
 
 def fn_mkdisk(split_args):
     try:
@@ -66,6 +107,22 @@ def fn_rmdisk(split_args):
     except SystemExit: printError("Análisis de argumentos")
     except Exception as e: printError(str(e))
 
+def fn_fdisk(split_args):
+    try:
+        parser = argparse.ArgumentParser(description="Parámetros")
+        parser.add_argument("-size", required=True, type=int, help="Tamaño de la particion")
+        parser.add_argument("-path", required=True, help="Ruta del disco en donde se creara la particion")
+        parser.add_argument("-name", required=True, help="Nombre de la particion")
+        parser.add_argument("-unit", required=False, choices=["b","k", "m"], default="k", help="Unidad de tamaño (opcional)")
+        parser.add_argument("-fit", required=False, choices=["bf", "ff", "wf"], default="wf",help="Tipo de ajuste de disco (opcional)")
+        args = parser.parse_args(split_args)
+
+        execute_fdisk(args)
+
+    except SystemExit: printError("Análisis de argumentos")
+    except Exception as e: printError(str(e))
+
+
 def fn_mount(split_args):
     try:
         parser = argparse.ArgumentParser(description="Parámetros")
@@ -78,18 +135,13 @@ def fn_mount(split_args):
     except SystemExit: printError("Análisis de argumentos")
     except Exception as e: printError(str(e))
 
-
-def fn_fdisk(split_args):
+def fn_unmount(split_args):
     try:
         parser = argparse.ArgumentParser(description="Parámetros")
-        parser.add_argument("-size", required=True, type=int, help="Tamaño de la particion")
-        parser.add_argument("-path", required=True, help="Ruta del disco en donde se creara la particion")
-        parser.add_argument("-name", required=True, help="Nombre de la particion")
-        parser.add_argument("-unit", required=False, choices=["B","K", "M"], default="K", help="Unidad de tamaño (opcional)")
-        parser.add_argument("-fit", required=False, choices=["BF", "FF", "WF"], default="WF",help="Tipo de ajuste de disco (opcional)")
+        parser.add_argument("-id", required=True, help="Id de la particion a desmontar")
         args = parser.parse_args(split_args)
 
-        execute_fdisk(args)
+        execute_unmount(args)
 
     except SystemExit: printError("Análisis de argumentos")
     except Exception as e: printError(str(e))
