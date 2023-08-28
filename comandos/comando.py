@@ -55,52 +55,106 @@ def execute_rmdisk(args):
 
 
 def execute_fdisk(args):
-    if args.size > 0:
-        if os.path.exists(args.path):
-            mbrDisco = Mbr()
+    if args.delete:
+            nombre_particion = "b'" + args.name + "'"
+            path = args.path
 
-            print("==========================antes==========================")
-            mbrDisco.particion1.display_info()
-            print("*******************************************")
-            mbrDisco.particion2.display_info()
-            print("*******************************************")
-            mbrDisco.particion3.display_info()
-            print("*******************************************")
-            mbrDisco.particion4.display_info()
-            print("*******************************************")
+            #buscar la particion y eliminarla
+            if os.path.exists(path):
+                mbrDisco = Mbr()
 
-            #obteniendo datos del mbr
-            obtenerDatosDisco(args.path, 0, mbrDisco)
+                #obteniendo datos del mbr
+                obtenerDatosDisco(path, 0, mbrDisco)
 
-            if mbrDisco.particion1.s == 0:
-                settearDatosParticion(mbrDisco, 1, args.name, args.fit, args.unit, args.size)
-                actualizarParticionesMBR(args.path, mbrDisco)
-            elif mbrDisco.particion2.s == 0:
-                settearDatosParticion(mbrDisco, 2, args.name, args.fit, args.unit, args.size)
-                actualizarParticionesMBR(args.path, mbrDisco)
-            elif mbrDisco.particion3.s == 0:
-                settearDatosParticion(mbrDisco, 3, args.name, args.fit, args.unit, args.size)
-                actualizarParticionesMBR(args.path, mbrDisco)
-            elif mbrDisco.particion4.s == 0:
-                settearDatosParticion(mbrDisco, 4, args.name, args.fit, args.unit, args.size)
-                actualizarParticionesMBR(args.path, mbrDisco)
+                if str(mbrDisco.particion1.get_name()) == nombre_particion:
+                    #preguntar si se desea eliminar la particion
+                    confirmacion = (input("Esta seguro que desea eliminar la particion? (S/N): ")).lower()
+                    if confirmacion == "s":
+                        mbrDisco.particion1.eliminar()
+                        actualizarParticionesMBR(path, mbrDisco)
+                        print("particion eliminada exitosamente")
+                    else:
+                        print("Eliminacion de particion cancelada")
+                elif str(mbrDisco.particion2.get_name()) == nombre_particion: 
+                    confirmacion = (input("Esta seguro que desea eliminar la particion? (S/N): ")).lower()
+                    if confirmacion == "s":
+                        mbrDisco.particion2.eliminar()
+                        actualizarParticionesMBR(path, mbrDisco)
+                        print("particion eliminada exitosamente")
+                    else:
+                        print("Eliminacion de particion cancelada")
+                elif str(mbrDisco.particion3.get_name()) == nombre_particion:
+                    confirmacion = (input("Esta seguro que desea eliminar la particion? (S/N): ")).lower()
+                    if confirmacion == "s":
+                        mbrDisco.particion3.eliminar()
+                        actualizarParticionesMBR(path, mbrDisco)
+                        print("particion eliminada exitosamente")
+                    else:
+                        print("Eliminacion de particion cancelada")
+                elif str(mbrDisco.particion4.get_name()) == nombre_particion:
+                    confirmacion = (input("Esta seguro que desea eliminar la particion? (S/N): ")).lower()
+                    if confirmacion == "s":
+                        mbrDisco.particion4.eliminar()
+                        actualizarParticionesMBR(path, mbrDisco)
+                        print("particion eliminada exitosamente")
+                    else:
+                        print("Eliminacion de particion cancelada")
+                else:
+                    print("Error: particion no encontrada")
+
+                print("=====================particiones========================")
+                mbrDisco.particion1.display_info()
+                print("*******************************************")
+                mbrDisco.particion2.display_info()
+                print("*******************************************")
+                mbrDisco.particion3.display_info()
+                print("*******************************************")
+                mbrDisco.particion4.display_info()
+                print("*******************************************")
+
             else:
-                print("Ya no existen particiones libres")
-
-            print("=====================despues========================")
-            mbrDisco.particion1.display_info()
-            print("*******************************************")
-            mbrDisco.particion2.display_info()
-            print("*******************************************")
-            mbrDisco.particion3.display_info()
-            print("*******************************************")
-            mbrDisco.particion4.display_info()
-            print("*******************************************")
-
-        else:
-            print("Error: El disco no existe.")
+                print("Error: El disco no existe.") 
     else:
-        print("Error: El tamaño de la particion debe ser positivo y mayor que 0.")
+        if args.size:
+            if args.size > 0:
+                #verificar si existe el parametro delete
+                if os.path.exists(args.path):
+                    mbrDisco = Mbr()
+
+                    #obteniendo datos del mbr
+                    obtenerDatosDisco(args.path, 0, mbrDisco)
+
+                    if mbrDisco.particion1.s == 0:
+                        settearDatosParticion(mbrDisco, 1, args.name, args.fit, args.unit, args.size)
+                        actualizarParticionesMBR(args.path, mbrDisco)
+                    elif mbrDisco.particion2.s == 0:
+                        settearDatosParticion(mbrDisco, 2, args.name, args.fit, args.unit, args.size)
+                        actualizarParticionesMBR(args.path, mbrDisco)
+                    elif mbrDisco.particion3.s == 0:
+                        settearDatosParticion(mbrDisco, 3, args.name, args.fit, args.unit, args.size)
+                        actualizarParticionesMBR(args.path, mbrDisco)
+                    elif mbrDisco.particion4.s == 0:
+                        settearDatosParticion(mbrDisco, 4, args.name, args.fit, args.unit, args.size)
+                        actualizarParticionesMBR(args.path, mbrDisco)
+                    else:
+                        print("Ya no existen particiones libres")
+
+                    print("=====================particiones========================")
+                    mbrDisco.particion1.display_info()
+                    print("*******************************************")
+                    mbrDisco.particion2.display_info()
+                    print("*******************************************")
+                    mbrDisco.particion3.display_info()
+                    print("*******************************************")
+                    mbrDisco.particion4.display_info()
+                    print("*******************************************")
+
+                else:
+                    print("Error: El disco no existe.")
+            else:
+                print("Error: El tamaño de la particion debe ser positivo y mayor que 0.")
+        else:
+            print("Error: El tamaño de la particion (-size) es obligatorio.")
         
 def settearDatosParticion(mbr, numero_particion, name, fit, unit, size):
     nombres_particiones = [str(mbr.particion1.get_name()), str(mbr.particion2.get_name()), str(mbr.particion3.get_name()), str(mbr.particion4.get_name())]

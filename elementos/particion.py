@@ -55,6 +55,14 @@ class Particion(ctypes.Structure):
     def get_name(self):
         return self.name
     
+    def eliminar(self):
+        self.status = b'\0'
+        self.type = b'\0'
+        self.fit = b'\0'
+        self.start = 0
+        self.s = 0
+        self.name = b'\0' * 16
+    
     def display_info(self):
         print(f"status: {self.status}")
         print(f"type: {self.type}")

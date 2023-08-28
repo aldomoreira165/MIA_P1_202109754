@@ -110,11 +110,13 @@ def fn_rmdisk(split_args):
 def fn_fdisk(split_args):
     try:
         parser = argparse.ArgumentParser(description="Parámetros")
-        parser.add_argument("-size", required=True, type=int, help="Tamaño de la particion")
+        parser.add_argument("-size", type=int, help="Tamaño de la particion")
         parser.add_argument("-path", required=True, help="Ruta del disco en donde se creara la particion")
         parser.add_argument("-name", required=True, help="Nombre de la particion")
         parser.add_argument("-unit", required=False, choices=["b","k", "m"], default="k", help="Unidad de tamaño (opcional)")
         parser.add_argument("-fit", required=False, choices=["bf", "ff", "wf"], default="wf",help="Tipo de ajuste de disco (opcional)")
+        parser.add_argument("-add", required=False, help="Agregar espacio a la particion (opcional)")
+        parser.add_argument("-delete", required=False, choices=["full"], help="Eliminar particion (opcional)")
         args = parser.parse_args(split_args)
 
         execute_fdisk(args)
