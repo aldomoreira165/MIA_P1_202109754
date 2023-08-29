@@ -1,15 +1,18 @@
 mkdisk -size=10 -path=/home/aldo/discos/discoNuevo.dsk\
-mkdisk -size=3000 -unit=K -path=./Disco1.dsk
+mkdisk -size=3 -unit=K -path=./disco.dsk
 mkdisk -size=5 -unit=M -path="./mis discos/Disco3.dsk"
 fdisk -size=1000 -unit=B -path=/home/aldo/discos/discoNuevo.dsk -name=particionNueva
+fdisk -size=200 -unit=B -path=./disco.dsk -name=particionUno
 fdisk -size=1000 -unit=B -path=./disco.dsk -name=particionDos
+fdisk -size=900 -unit=B -path=./disco.dsk -name=particionTres
 fdisk -size=1000 -unit=B -path=./disco.dsk -name=particionTres
-fdisk -size=1000 -unit=B -path=./disco.dsk -name=particionTres
-fdisk -size=1000 -unit=B -path=./disco.dsk -name=particionCuatro
-fdisk -size=1000 -unit=B -path=./disco.dsk -name=particionCinco
-fdisk -delete=full -path=./disco.dsk -name=particionDosss
+fdisk -size=800 -unit=B -path=./disco.dsk -name=particionCuatro
+fdisk -size=230 -unit=B -path=./disco.dsk -name=particionCinco
+fdisk -add=1 -unit=B -path=./disco.dsk -name=particionCinco
+fdisk -add=-200 -unit=B -path=./disco.dsk -name=particionUno
+fdisk -delete=full -path=./disco.dsk -name=particionUno
 mount -path=./disco.dsk -name=particionDos
-mount -path=./disco.dsk -name=particionNu
+mount -path=./disco.dsk -name=particionUnoe
 mount -path=/home/aldo/discos/discoNuevo.dsk -name=particionNueva
 mount -path=/home/aldo/discos/discoNuevo.dsk -name=particionConteni
-unmount -id=542disco
+unmount -id=541disco

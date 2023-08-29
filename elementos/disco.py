@@ -46,7 +46,7 @@ def generarDatosDisco(archivo, desplazamiento, objeto):
         datos = objeto.doSerialize()
         archivo.seek(desplazamiento)
         archivo.write(datos)
-        print("escritura correcta")
+        #print("escritura correcta")
     except Exception as e:
         print(f"Error en escritura disco: {e}")
 
@@ -59,6 +59,14 @@ def obtenerDatosDisco(nombre, desplazamiento,objeto):
             data = fileOpen.read(len(objeto.doSerialize()))
             #print("Size data: ",  len(data))
             objeto.doDeserialize(data)
-            print("lectura correcta")
+            #print("lectura correcta")
         except Exception as e:
             print(f"Error reading object err: {e}")
+
+def obtener_total_bytes(size, unit):
+    if unit == "k":
+        return size * 1024
+    elif unit == "m":
+        return size * 1024 * 1024
+    else:
+        return "Error de unidad"

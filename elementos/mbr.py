@@ -42,7 +42,6 @@ class Mbr(ctypes.Structure):
         self.set_fit(fit)
         self.set_dsk_signature()
         #self.set_time()
-
     
     def display_info(self):
         print(f"tamano: {self.tamano}")
