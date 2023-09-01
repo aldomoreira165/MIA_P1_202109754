@@ -184,19 +184,19 @@ def execute_fdisk(args):
                     espacio_ocupado = verificar_espacio_disco(args.path)
                     if espacio_ocupado + args.size <= mbrDisco.tamano:
                         if mbrDisco.particion1.s == 0:
-                            settearDatosParticion(mbrDisco, 1, args.name, args.fit, args.unit, args.size)
+                            settearDatosParticion(mbrDisco, 1, args.name, args.fit, args.type, args.unit, args.size)
                             actualizarParticionesMBR(args.path, mbrDisco)
                             actualizar_start_particiones(args.path, mbrDisco)
                         elif mbrDisco.particion2.s == 0:
-                            settearDatosParticion(mbrDisco, 2, args.name, args.fit, args.unit, args.size)
+                            settearDatosParticion(mbrDisco, 2, args.name, args.fit, args.type, args.unit, args.size)
                             actualizarParticionesMBR(args.path, mbrDisco)
                             actualizar_start_particiones(args.path, mbrDisco)
                         elif mbrDisco.particion3.s == 0:
-                            settearDatosParticion(mbrDisco, 3, args.name, args.fit, args.unit, args.size)
+                            settearDatosParticion(mbrDisco, 3, args.name, args.fit, args.type, args.unit, args.size)
                             actualizarParticionesMBR(args.path, mbrDisco)
                             actualizar_start_particiones(args.path, mbrDisco)
                         elif mbrDisco.particion4.s == 0:
-                            settearDatosParticion(mbrDisco, 4, args.name, args.fit, args.unit, args.size)
+                            settearDatosParticion(mbrDisco, 4, args.name, args.fit, args.type, args.unit, args.size)
                             actualizarParticionesMBR(args.path, mbrDisco)
                             actualizar_start_particiones(args.path, mbrDisco)
                         else:
@@ -221,7 +221,7 @@ def execute_fdisk(args):
         else:
             print("Error: El tamaño de la particion (-size) es obligatorio.")
         
-def settearDatosParticion(mbr, numero_particion, name, fit, unit, size):
+def settearDatosParticion(mbr, numero_particion, name, fit, type, unit, size):
     nombres_particiones = [str(mbr.particion1.get_name()), str(mbr.particion2.get_name()), str(mbr.particion3.get_name()), str(mbr.particion4.get_name())]
     nombre_comparar = "b'" + name + "'"
 
@@ -229,83 +229,85 @@ def settearDatosParticion(mbr, numero_particion, name, fit, unit, size):
         if nombre_comparar in nombres_particiones:
             print("Error: nombre de particion ya existe")
         else:
-            inicio = len(mbr.doSerialize())
-            mbr.particion1.set_name(name)
-            mbr.particion1.set_fit(fit)
-            mbr.particion1.set_start(inicio)
+            if set_tipo_particion(mbr, numero_particion, type) == True:
+                inicio = len(mbr.doSerialize())
+                mbr.particion1.set_name(name)
+                mbr.particion1.set_fit(fit)
+                mbr.particion1.set_start(inicio)
+                set_tipo_particion(mbr, numero_particion, type)
 
-            if unit == "b":
-                mbr.particion1.set_s(size)
-            elif unit== "k":
-                size_k = size * 1024
-                mbr.particion1.set_s(size_k)
-            elif unit == "m":
-                size_w = size * 1024 * 1024
-                mbr.particion1.set_s(size_w)
-            else:
-                print("unidad de particion incorrecta")
+                if unit == "b":
+                    mbr.particion1.set_s(size)
+                elif unit== "k":
+                    size_k = size * 1024
+                    mbr.particion1.set_s(size_k)
+                elif unit == "m":
+                    size_w = size * 1024 * 1024
+                    mbr.particion1.set_s(size_w)
+                else:
+                    print("unidad de particion incorrecta")
 
     elif numero_particion == 2:
         if nombre_comparar in nombres_particiones:
             print("Error: nombre de particion ya existe")
         else:
-            inicio = len(mbr.doSerialize()) + mbr.particion1.s
-            mbr.particion2.set_name(name)
-            mbr.particion2.set_fit(fit)
-            mbr.particion2.set_start(inicio)
+            if set_tipo_particion(mbr, numero_particion, type) == True:
+                inicio = len(mbr.doSerialize()) + mbr.particion1.s
+                mbr.particion2.set_name(name)
+                mbr.particion2.set_fit(fit)
+                mbr.particion2.set_start(inicio)
 
-            if unit == "b":
-                mbr.particion2.set_s(size)
-            elif unit== "k":
-                size_k = size * 1024
-                mbr.particion2.set_s(size_k)
-            elif unit == "m":
-                size_w = size * 1024 * 1024
-                mbr.particion2.set_s(size_w)
-            else:
-                print("unidad de particion incorrecta")
-
+                if unit == "b":
+                    mbr.particion2.set_s(size)
+                elif unit== "k":
+                    size_k = size * 1024
+                    mbr.particion2.set_s(size_k)
+                elif unit == "m":
+                    size_w = size * 1024 * 1024
+                    mbr.particion2.set_s(size_w)
+                else:
+                    print("unidad de particion incorrecta")
     elif numero_particion == 3:
         if nombre_comparar in nombres_particiones:
             print("Error: nombre de particion ya existe")
         else:
-            inicio = len(mbr.doSerialize()) + mbr.particion1.s + mbr.particion2.s
-            mbr.particion3.set_name(name)
-            mbr.particion3.set_fit(fit)
-            mbr.particion3.set_start(inicio)
+            if set_tipo_particion(mbr, numero_particion, type) == True:
+                inicio = len(mbr.doSerialize()) + mbr.particion1.s + mbr.particion2.s
+                mbr.particion3.set_name(name)
+                mbr.particion3.set_fit(fit)
+                mbr.particion3.set_start(inicio)
 
-            if unit == "b":
-                mbr.particion3.set_s(size)
-            elif unit== "k":
-                size_k = size * 1024
-                mbr.particion3.set_s(size_k)
-            elif unit == "m":
-                size_w = size * 1024 * 1024
-                mbr.particion3.set_s(size_w)
-            else:
-                print("unidad de particion incorrecta")
+                if unit == "b":
+                    mbr.particion3.set_s(size)
+                elif unit== "k":
+                    size_k = size * 1024
+                    mbr.particion3.set_s(size_k)
+                elif unit == "m":
+                    size_w = size * 1024 * 1024
+                    mbr.particion3.set_s(size_w)
+                else:
+                    print("unidad de particion incorrecta")
 
     elif numero_particion == 4:
-
         if nombre_comparar in nombres_particiones:
             print("Error: nombre de particion ya existe")
         else:
-            inicio = len(mbr.doSerialize()) + mbr.particion1.s + mbr.particion2.s + mbr.particion3.s
-            mbr.particion4.set_name(name)
-            mbr.particion4.set_fit(fit)
-            mbr.particion4.set_start(inicio)
+            if set_tipo_particion(mbr, numero_particion, type) == True:
+                inicio = len(mbr.doSerialize()) + mbr.particion1.s + mbr.particion2.s + mbr.particion3.s
+                mbr.particion4.set_name(name)
+                mbr.particion4.set_fit(fit)
+                mbr.particion4.set_start(inicio)
 
-            if unit == "b":
-                mbr.particion4.set_s(size)
-            elif unit== "k":
-                size_k = size * 1024
-                mbr.particion4.set_s(size_k)
-            elif unit == "m":
-                size_w = size * 1024 * 1024
-                mbr.particion4.set_s(size_w)
-            else:
-                print("unidad de particion incorrecta")
-
+                if unit == "b":
+                    mbr.particion4.set_s(size)
+                elif unit== "k":
+                    size_k = size * 1024
+                    mbr.particion4.set_s(size_k)
+                elif unit == "m":
+                    size_w = size * 1024 * 1024
+                    mbr.particion4.set_s(size_w)
+                else:
+                    print("unidad de particion incorrecta")
 def execute_mount(args):
     if os.path.exists(args.path):
         mbrDisco = Mbr()
@@ -379,6 +381,48 @@ def execute_unmount(args):
         print("Particiones montadas: ", particiones_montadas)
     else:
         print("Error: particion no encontrada")
+
+#funcion para verificar si ya existe particion extendida
+def verificar_particion_extendida(mbr):
+    if mbr.particion1.type == b'e' or mbr.particion2.type == b'e' or mbr.particion3.type == b'e' or mbr.particion4.type == b'e':
+        return True
+    else:
+        return False
+    
+#funcion para setter tipo de particion
+def set_tipo_particion(mbr, numero_particion, type):
+
+    if type == "e":
+        if verificar_particion_extendida(mbr)  == True:
+            print("Error: ya existe una particion extendida")
+            return False
+        else:
+            if numero_particion == 1:
+                mbr.particion1.set_type(type)
+            elif numero_particion == 2:
+                mbr.particion2.set_type(type)
+            elif numero_particion == 3:
+                mbr.particion3.set_type(type)
+            elif numero_particion == 4:
+                mbr.particion4.set_type(type)
+            return True
+    elif type == "p":
+        if numero_particion == 1:
+            mbr.particion1.set_type(type)
+        elif numero_particion == 2:
+            mbr.particion2.set_type(type)
+        elif numero_particion == 3:
+            mbr.particion3.set_type(type)
+        elif numero_particion == 4:
+            mbr.particion4.set_type(type)
+        return True
+    elif type == "l":
+        if verificar_particion_extendida(mbr) == False:
+            print("Error: no existe particion extendida")
+            return False
+        else:
+            print("Creando particion logica")
+            return True
 
 #funcion para verificar si existe espacio en el disco
 def verificar_espacio_disco(disco):

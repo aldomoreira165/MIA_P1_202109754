@@ -1,3 +1,12 @@
+mkdisk -size=3000 -unit=K -path=./Disco1.dsk
+mkdisk -path=./Disco2.dsk -unit=K -size=3000
+mkdisk -size=5 -unit=M -path=./Disco3.dsk
+
+fdisk -size=300 -path=./Disco1.dsk -name=Particion1
+fdisk -type=E -path=./Disco2.dsk -unit=K -name=Particion2 -size=300
+fdisk -size=1 -type=L -unit=M -fit=bf -path=./Disco3.dsk -name="Particion3"
+fdisk -type=E -path=./Disco2.dsk -name=Part3 -unit=K -size=200
+
 mkdisk -size=10 -path=/home/aldo/discos/discoNuevo.dsk\
 mkdisk -size=3 -unit=K -path=./disco.dsk
 mkdisk -size=5 -unit=M -path="./mis discos/Disco3.dsk"
