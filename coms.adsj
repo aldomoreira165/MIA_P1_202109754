@@ -1,0 +1,10 @@
+#comentario de inicio
+
+mkdisk -size=10 -unit=k -path=./discoNuevo.dsk
+
+mkdisk -size=100 -path=./discoNuevo2.dsk
+rmdisk -path=./discoNuevo.dsk
+
+fdisk -size=10 -unit=M -path=./discoNuevo2.dsk -name=particionExec
+
+mount -path=./discoNuevo2.dsk -name=particionExec

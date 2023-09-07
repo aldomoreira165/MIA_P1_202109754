@@ -46,6 +46,10 @@ def AnalyzeType(entry):
             print(" ------ Se detecto unmount ------ ")
             fn_unmount(split_args)
             print(" ------ Termino unmount ------ ")
+        elif (command == "mkfs"):
+            print(" ------ Se detecto mkfs ------ ")
+            fn_mkfs(split_args)
+            print(" ------ Termino mkfs ------ ")
     except Exception as e: pass
 
 def fn_execute(split_args):
@@ -57,24 +61,9 @@ def fn_execute(split_args):
         if os.path.exists(args.path):
             with open(args.path, 'r') as file:
                 for line in file:
-                    line = line.strip()  # Eliminar espacios en blanco al principio y al final
-                    if line:  # Saltar líneas vacías
-                        command_args = shlex.split(line)
-                        command = command_args[0]
-                        args = command_args[1:]
-
-                        if command == "mkdisk":
-                            execute_mkdisk(args)
-                        elif command == "rmdisk":
-                            execute_rmdisk(args)
-                        elif command == "fdisk":
-                            execute_fdisk(args)
-                        elif command == "mount":
-                            execute_mount(args)
-                        elif command == "unmount":
-                            execute_unmount(args)
-                        # Agregar más comandos aquí según sea necesario
-
+                    line = line.lower()
+                    command = re.sub(r"[#][^\n]*", "", line)
+                    AnalyzeType(command)
         else:
             print(f"El archivo {args.path} no existe.")
 
@@ -145,6 +134,20 @@ def fn_unmount(split_args):
         args = parser.parse_args(split_args)
 
         execute_unmount(args)
+
+    except SystemExit: printError("Análisis de argumentos")
+    except Exception as e: printError(str(e))
+
+
+def fn_mkfs(split_args):
+    try:
+        parser = argparse.ArgumentParser(description="Parámetros")
+        parser.add_argument("-id", required=True, help="Id de la particion a formatear")
+        parser.add_argument("-type", required=False, choices=["full"], default="full", help="Tipo de formateo")
+        parser.add_argument("-fs", required=False, choices=["2fs", "3fs"], default="3fs", help="Tipo de sistema de archivos")
+        args = parser.parse_args(split_args)
+
+        execute_mkfs(args)
 
     except SystemExit: printError("Análisis de argumentos")
     except Exception as e: printError(str(e))
