@@ -4,6 +4,7 @@ import argparse
 import shlex
 from funciones.utilities import printConsole,printError
 from comandos.comando import *
+from comandos.reportes import execute_rep
 
 
 def Commands():
@@ -19,37 +20,49 @@ def Commands():
 
 def AnalyzeType(entry):
     try:
-        printConsole("Analizando comando: " + entry)
-        split_args = shlex.split(entry)
-        command = split_args.pop(0)
-        if (command == "execute"):
-            print(" ------ Se detecto execute ------ ")
-            fn_execute(split_args)
-            print(" ------ Termino execute ------ ")
-        elif(command == "mkdisk"):
-            print(" ------ Se detecto mkdisk ------ ")
-            fn_mkdisk(split_args)
-            print(" ------ Termino mkdisk ------ ")
-        elif(command == "rmdisk"):
-            print(" ------ Se detecto rmdisk ------ ")
-            fn_rmdisk(split_args)
-            print(" ------ Termino rmdisk ------ ")
-        elif(command == "fdisk"):
-            print(" ------ Se detecto fdisk ------ ")
-            fn_fdisk(split_args)
-            print(" ------ Termino fdisk ------ ")
-        elif(command == "mount"):
-            print(" ------ Se detecto mount ------ ")
-            fn_mount(split_args)
-            print(" ------ Termino mount ------ ")
-        elif(command == "unmount"):
-            print(" ------ Se detecto unmount ------ ")
-            fn_unmount(split_args)
-            print(" ------ Termino unmount ------ ")
-        elif (command == "mkfs"):
-            print(" ------ Se detecto mkfs ------ ")
-            fn_mkfs(split_args)
-            print(" ------ Termino mkfs ------ ")
+        #verificar si tiene la forma de un comentario 
+        if re.search(r"^[#][^\n]*", entry) or re.search(r"^[#][^\n]*$", entry):
+            printConsole(entry)
+        else: 
+            printConsole("Analizando comando: " + entry)
+            split_args = shlex.split(entry)
+            command = split_args.pop(0)
+            if (command == "execute"):
+                print(" ------ Se detecto execute ------ ")
+                fn_execute(split_args)
+                print(" ------ Termino execute ------ ")
+            elif(command == "mkdisk"):
+                print(" ------ Se detecto mkdisk ------ ")
+                fn_mkdisk(split_args)
+                print(" ------ Termino mkdisk ------ ")
+            elif(command == "rmdisk"):
+                print(" ------ Se detecto rmdisk ------ ")
+                fn_rmdisk(split_args)
+                print(" ------ Termino rmdisk ------ ")
+            elif(command == "fdisk"):
+                print(" ------ Se detecto fdisk ------ ")
+                fn_fdisk(split_args)
+                print(" ------ Termino fdisk ------ ")
+            elif(command == "mount"):
+                print(" ------ Se detecto mount ------ ")
+                fn_mount(split_args)
+                print(" ------ Termino mount ------ ")
+            elif(command == "unmount"):
+                print(" ------ Se detecto unmount ------ ")
+                fn_unmount(split_args)
+                print(" ------ Termino unmount ------ ")
+            elif (command == "mkfs"):
+                print(" ------ Se detecto mkfs ------ ")
+                fn_mkfs(split_args)
+                print(" ------ Termino mkfs ------ ")
+            elif (command == "pause"):
+                print(" ------ Se detecto pause ------ ")
+                input("Presione enter para continuar...")
+                print(" ------ Termino pause ------ ")
+            elif (command == "rep"):
+                print(" ------ Se detecto rep ------ ")
+                fn_rep(split_args)
+                print(" ------ Termino rep ------ ")
     except Exception as e: pass
 
 def fn_execute(split_args):
@@ -62,8 +75,7 @@ def fn_execute(split_args):
             with open(args.path, 'r') as file:
                 for line in file:
                     line = line.lower()
-                    command = re.sub(r"[#][^\n]*", "", line)
-                    AnalyzeType(command)
+                    AnalyzeType(line)
         else:
             print(f"El archivo {args.path} no existe.")
 
@@ -148,6 +160,20 @@ def fn_mkfs(split_args):
         args = parser.parse_args(split_args)
 
         execute_mkfs(args)
+
+    except SystemExit: printError("Análisis de argumentos")
+    except Exception as e: printError(str(e))
+
+def fn_rep(split_args):
+    try:
+        parser = argparse.ArgumentParser(description="Parámetros")
+        parser.add_argument("-name", required=True, choices=["mbr", "disk", "inode", "journaling", "block", "bm_inode", "bm_block", "tree", "sb", "file", "ls"], help="Nombre del reporte")
+        parser.add_argument("-path", required=True, help="Ruta del reporte")
+        parser.add_argument("-id", required=True, help="Id de la particion a reportar")
+        parser.add_argument("-ruta", required=False, help="Nombre del archivo o carpeta del que se mostrara el reporte")
+        args = parser.parse_args(split_args)
+
+        execute_rep(args)
 
     except SystemExit: printError("Análisis de argumentos")
     except Exception as e: printError(str(e))

@@ -4,19 +4,19 @@ import random
 from funciones.utilities import coding_str
 from elementos.particion import Particion
 
-const = 'I I 1s'
+const = 'I 17s I 1s'
 
 class Mbr(ctypes.Structure):
     _fields_ = [
         ('tamano', ctypes.c_int),
-        #('time', ctypes.c_long),
+        ('time', ctypes.c_char*17),
         ('dsk_signature', ctypes.c_int ),
         ('fit', ctypes.c_char)
     ]
 
     def __init__(self):
         self.tamano = 0
-        #self.time = 0
+        self.time = b'\0'*17
         self.dsk_signature = 0
         self.fit = b'\0'
         self.particion1 = Particion()
@@ -28,8 +28,8 @@ class Mbr(ctypes.Structure):
     def set_tamano(self, tamano):
         self.tamano = tamano
 
-    """def set_time(self):
-        self.time= int(datetime.datetime.now().timestamp())"""
+    def set_time(self, time):
+        self.time= time
 
     def set_fit(self, fit):
         self.fit = coding_str(fit, 1)
@@ -37,17 +37,30 @@ class Mbr(ctypes.Structure):
     def set_dsk_signature(self):
         self.dsk_signature = random.randint(1, 1000)
 
-    def set_infomation(self, tamano, fit):
+    def get_tamano(self):
+        return self.tamano
+    
+    def get_time(self):
+        return self.time
+    
+    def get_fit(self):
+        return self.fit
+    
+    def get_dsk_signature(self):
+        return self.dsk_signature
+
+    def set_infomation(self, tamano, time,  fit):
         self.set_tamano(tamano)
+        self.set_time(time)
         self.set_fit(fit)
         self.set_dsk_signature()
-        #self.set_time()
     
     def display_info(self):
         print(f"tamano: {self.tamano}")
+        print(f"time: {self.time}")
         print(f"fit: {self.fit}")
         print(f"dsk_signature: {self.dsk_signature}")
-        #print(f"fecha: {self.time}")
+
         """print(f"particion 1: {self.particion1}")
         print(f"particion 2: {self.particion2}")
         print(f"particion 3: {self.particion3}")
@@ -55,7 +68,7 @@ class Mbr(ctypes.Structure):
         
 
     def doSerialize(self):
-        mbr_data = struct.pack(const, self.tamano, self.dsk_signature, self.fit)
+        mbr_data = struct.pack(const, self.tamano, self.time, self.dsk_signature, self.fit)
         particiones_data = self.particion1.doSerialize()+ self.particion2.doSerialize() + self.particion3.doSerialize() + self.particion4.doSerialize() 
         return mbr_data + particiones_data
 
@@ -66,7 +79,7 @@ class Mbr(ctypes.Structure):
         size_particion3 = struct.calcsize(self.particion3.get_const())
 
         data_mrb = data[:size_mbr]
-        self.tamano, self.dsk_signature, self.fit = struct.unpack(const, data_mrb)
+        self.tamano, self.time, self.dsk_signature, self.fit = struct.unpack(const, data_mrb)
 
         data_patition1 = data[size_mbr:size_mbr + size_particion1]
         self.particion1.doDeserialize(data_patition1)

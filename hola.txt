@@ -34,3 +34,4 @@ mount -path=/home/aldo/discos/discoNuevo.dsk -name=particionConteni
 unmount -id=541disco
 
 execute -path=./coms.adsj
+rep -name=mbr -path=./disco.dsk -id=particion

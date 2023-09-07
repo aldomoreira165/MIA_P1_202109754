@@ -24,7 +24,8 @@ def execute_mkdisk(args):
             #creando mbr de disco
             mbr = Mbr()
             bytes = obtener_total_bytes(args.size, args.unit)
-            mbr.set_infomation(bytes, args.fit)
+            date = coding_str(datetime.datetime.now().strftime("%d/%m/%Y %H:%M"), 16)
+            mbr.set_infomation(bytes, date, args.fit)
 
             #generando objeto mbr en el disco
             generarDatosDisco(discoCreado, 0, mbr)
