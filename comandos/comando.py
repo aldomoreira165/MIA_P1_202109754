@@ -303,8 +303,18 @@ def caseExtendida(mbr, disco, numParticion):
 
 def setDataEBR(discoAbierto, inicio, size, name):
     ebr = Ebr()
-    ebr.set_infomation(b'\0', b'\0', inicio, size, -1, name)
+
+    ebr.status = coding_str("0", 1)
+    ebr.fit = coding_str("0", 1)
+    ebr.start = inicio
+    ebr.s = size
+    ebr.next = -1
+    ebr.name = coding_str("discoHola", 16)
+
+    print("antes")
+    ebr.display_info()
     generarDatosDisco(discoAbierto, inicio, ebr)
+    print("despues")
     ebr.display_info()
     print("size", size)
     print("inicio", inicio)

@@ -44,12 +44,12 @@ class Ebr(ctypes.Structure):
         self.name = coding_str(name, 16)
 
     def set_infomation(self, status, fit, start, s, next, name):
-        self.set_status(status)
-        self.set_fit(fit)
-        self.set_start(start)
-        self.set_s(s)
-        self.set_next(next)
-        self.set_name(name)
+        self.set_status = status
+        self.set_fit = fit
+        self.set_start = start
+        self.set_s = s
+        self.set_next = next
+        self.set_name = name
     
     def display_info(self):
         print(f"status: {self.status}")
