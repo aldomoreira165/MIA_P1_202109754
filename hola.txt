@@ -33,5 +33,9 @@ mount -path=/home/aldo/discos/discoNuevo.dsk -name=particionNueva
 mount -path=/home/aldo/discos/discoNuevo.dsk -name=particionConteni
 unmount -id=541disco
 
+mkdisk -path=./Disco.dsk -unit=K -size=3000
+fdisk -size=300 -path=./Disco.dsk -name=Particion1
+fdisk -type=E -path=./Disco.dsk -unit=K -name=Particion2 -size=300
+
 execute -path=./coms.adsj
 rep -name=mbr -path=./disco.dsk -id=particion

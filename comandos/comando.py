@@ -8,6 +8,7 @@ from elementos.bloque_archivos import *
 from elementos.mbr import Mbr
 from elementos.disco import *
 from funciones.utilities import coding_str
+from elementos.ebr import Ebr
 
 particiones_montadas = []
 
@@ -183,7 +184,6 @@ def execute_fdisk(args):
             if args.size > 0:
                 if os.path.exists(args.path):
                     mbrDisco = Mbr()
-
                     #obteniendo datos del mbr
                     obtenerDatosDisco(args.path, 0, mbrDisco)
 
@@ -194,29 +194,53 @@ def execute_fdisk(args):
                             settearDatosParticion(mbrDisco, 1, args.name, args.fit, args.type, args.unit, args.size)
                             actualizarParticionesMBR(args.path, mbrDisco)
                             actualizar_start_particiones(args.path, mbrDisco)
+                            caseExtendida(mbrDisco, args.path, 1)
                         elif mbrDisco.particion2.s == 0:
                             settearDatosParticion(mbrDisco, 2, args.name, args.fit, args.type, args.unit, args.size)
                             actualizarParticionesMBR(args.path, mbrDisco)
                             actualizar_start_particiones(args.path, mbrDisco)
+                            caseExtendida(mbrDisco, args.path, 2)
                         elif mbrDisco.particion3.s == 0:
                             settearDatosParticion(mbrDisco, 3, args.name, args.fit, args.type, args.unit, args.size)
                             actualizarParticionesMBR(args.path, mbrDisco)
                             actualizar_start_particiones(args.path, mbrDisco)
+                            caseExtendida(mbrDisco, args.path, 3)
                         elif mbrDisco.particion4.s == 0:
                             settearDatosParticion(mbrDisco, 4, args.name, args.fit, args.type, args.unit, args.size)
                             actualizarParticionesMBR(args.path, mbrDisco)
                             actualizar_start_particiones(args.path, mbrDisco)
+                            caseExtendida(mbrDisco, args.path, 4)
                         else:
                             print("Ya no existen particiones libres")
 
                         print("=====================particiones========================")
                         mbrDisco.particion1.display_info()
+                        if mbrDisco.particion1.type == b'e':
+                            print("--extendida--")
+                            ebr = Ebr()
+                            obtenerDatosDisco(args.path, mbrDisco.particion1.start, ebr)
+                            ebr.display_info()
                         print("*******************************************")
                         mbrDisco.particion2.display_info()
+                        if mbrDisco.particion2.type == b'e':
+                            print("--extendida--")
+                            ebr = Ebr()
+                            obtenerDatosDisco(args.path, mbrDisco.particion2.start, ebr)
+                            ebr.display_info()
                         print("*******************************************")
                         mbrDisco.particion3.display_info()
+                        if mbrDisco.particion3.type == b'e':
+                            print("--extendida--")
+                            ebr = Ebr()
+                            obtenerDatosDisco(args.path, mbrDisco.particion3.start, ebr)
+                            ebr.display_info()
                         print("*******************************************")
                         mbrDisco.particion4.display_info()
+                        if mbrDisco.particion4.type == b'e':
+                            print("--extendida--")
+                            ebr = Ebr()
+                            obtenerDatosDisco(args.path, mbrDisco.particion4.start, ebr)
+                            ebr.display_info()
                         print("*******************************************")
                     else:
                         espacio_libre = mbrDisco.tamano - espacio_ocupado
@@ -227,7 +251,64 @@ def execute_fdisk(args):
                 print("Error: El tamaño de la particion debe ser positivo y mayor que 0.")
         else:
             print("Error: El tamaño de la particion (-size) es obligatorio.")
-        
+
+def caseExtendida(mbr, disco, numParticion):
+    extendida = False
+    inicio = -1
+    size = 0
+    name = ""
+
+    if numParticion == 1:
+        if mbr.particion1.type == b'e':
+            inicio = mbr.particion1.start
+            size = mbr.particion1.s
+            name = mbr.particion1.get_name()
+            extendida = True
+ 
+            if extendida:
+                with open(disco, "rb+") as discoAbierto:
+                    setDataEBR(discoAbierto, inicio, size, name)
+
+    elif numParticion == 2:
+        if mbr.particion2.type == b'e':
+            inicio = mbr.particion2.start
+            size = mbr.particion2.s
+            name = mbr.particion2.get_name()
+            extendida = True
+            
+            if extendida:
+                with open(disco, "rb+") as discoAbierto:
+                    setDataEBR(discoAbierto, inicio, size, name)
+
+    elif numParticion == 3:
+        if mbr.particion3.type == b'e':
+            inicio = mbr.particion3.start
+            size = mbr.particion3.s
+            name = mbr.particion3.get_name()
+            extendida = True
+            
+            if extendida:
+                with open(disco, "rb+") as discoAbierto:
+                    setDataEBR(discoAbierto, inicio, size, name)
+    elif numParticion == 4:
+        if mbr.particion4.type == b'e':
+            inicio = mbr.particion4.start
+            size = mbr.particion4.s
+            name = mbr.particion4.get_name()
+            extendida = True
+
+            if extendida:
+                with open(disco, "rb+") as discoAbierto:
+                    setDataEBR(discoAbierto, inicio, size, name)      
+
+def setDataEBR(discoAbierto, inicio, size, name):
+    ebr = Ebr()
+    ebr.set_infomation(b'\0', b'\0', inicio, size, -1, name)
+    generarDatosDisco(discoAbierto, inicio, ebr)
+    ebr.display_info()
+    print("size", size)
+    print("inicio", inicio)
+
 def settearDatosParticion(mbr, numero_particion, name, fit, type, unit, size):
     nombres_particiones = [str(mbr.particion1.get_name()), str(mbr.particion2.get_name()), str(mbr.particion3.get_name()), str(mbr.particion4.get_name())]
     nombre_comparar = "b'" + name + "'"
@@ -333,7 +414,6 @@ def execute_mount(args):
             if id_particion in particiones_montadas:
                 print("Error: particion ya montada")
             else:
-                size_particion = mbrDisco.particion1.s
                 particion_a_montar = [id_particion, mbrDisco.particion1, args.path]
                 particiones_montadas.append(particion_a_montar)
                 print("Particion montada correctamente")
@@ -344,7 +424,6 @@ def execute_mount(args):
             if id_particion in particiones_montadas:
                 print("Error: particion ya montada")
             else:
-                size_particion = mbrDisco.particion2.s
                 particion_a_montar = [id_particion, mbrDisco.particion2, args.path]
                 particiones_montadas.append(particion_a_montar)
                 print("Particion montada correctamente")
@@ -355,7 +434,6 @@ def execute_mount(args):
             if id_particion in particiones_montadas:
                 print("Error: particion ya montada")
             else:
-                size_particion = mbrDisco.particion3.s
                 particion_a_montar = [id_particion, mbrDisco.particion3, args.path]
                 particiones_montadas.append(particion_a_montar)
                 print("Particion montada correctamente")
@@ -366,7 +444,6 @@ def execute_mount(args):
             if id_particion in particiones_montadas:
                 print("Error: particion ya montada")
             else:
-                size_particion = mbrDisco.particion4.s
                 particion_a_montar = [id_particion, mbrDisco.particion4, args.path]
                 particiones_montadas.append(particion_a_montar)
                 print("Particion montada correctamente")
@@ -513,7 +590,6 @@ def actualizarParticionesMBR(rutaDisco, mbr):
     disco = open(rutaDisco, "rb+")
     generarDatosDisco(disco, 0, mbr)
     disco.close()
-
 
 #funcion para actualizar el start al agregar o eliminar una particion
 def actualizar_start_particiones(disco, mbr):

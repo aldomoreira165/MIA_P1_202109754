@@ -4,7 +4,7 @@ from funciones.utilities import coding_str
 
 const = '1s 1s I I I 16s'
 
-class ebr(ctypes.Structure):
+class Ebr(ctypes.Structure):
     _fields_ = [
         ('status', ctypes.c_char),
         ('fit', ctypes.c_char),
@@ -19,8 +19,11 @@ class ebr(ctypes.Structure):
         self.fit = b'\0'
         self.start = 0
         self.s = 0
-        self.next = -1
+        self.next = 0
         self.name = b'\0' * 16
+
+    def get_const(self):
+        return const
  
     def set_status(self, status):
         self.status = coding_str(status, 1)
@@ -41,12 +44,12 @@ class ebr(ctypes.Structure):
         self.name = coding_str(name, 16)
 
     def set_infomation(self, status, fit, start, s, next, name):
-        self.set_status = status
-        self.fit = fit
-        self.start = start
-        self.s = s
-        self.next = next
-        self.name = name
+        self.set_status(status)
+        self.set_fit(fit)
+        self.set_start(start)
+        self.set_s(s)
+        self.set_next(next)
+        self.set_name(name)
     
     def display_info(self):
         print(f"status: {self.status}")
@@ -58,7 +61,15 @@ class ebr(ctypes.Structure):
         
 
     def doSerialize(self):
-        return struct.pack(self.get_const(), self.status, self.fit, self.start, self.s, self.next, self.name)
+        return struct.pack(
+            const,
+            self.status,
+            self.fit,
+            self.start,
+            self.s,
+            self.next,
+            self.name
+        )
 
     def doDeserialize(self, data):
         self.status, self.fit, self.start, self.s, self.next, self.name = struct.unpack(const, data)
