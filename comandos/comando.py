@@ -241,7 +241,6 @@ def settearDatosParticion(mbr, numero_particion, name, fit, type, unit, size):
                 mbr.particion1.set_name(name)
                 mbr.particion1.set_fit(fit)
                 mbr.particion1.set_start(inicio)
-                set_tipo_particion(mbr, numero_particion, type)
 
                 if unit == "b":
                     mbr.particion1.set_s(size)
@@ -315,6 +314,7 @@ def settearDatosParticion(mbr, numero_particion, name, fit, type, unit, size):
                     mbr.particion4.set_s(size_w)
                 else:
                     print("unidad de particion incorrecta")
+
 def execute_mount(args):
     if os.path.exists(args.path):
         mbrDisco = Mbr()
@@ -497,6 +497,7 @@ def set_tipo_particion(mbr, numero_particion, type):
             print("Error: no existe particion extendida")
             return False
         else:
+            
             print("Creando particion logica")
             return True
 

@@ -1,6 +1,8 @@
+#iniciando ejecucion de prueba
 mkdisk -size=3000 -unit=K -path=./disco.dsk
 fdisk -size=200 -unit=B -path=./disco.dsk -name=particionUno
 fdisk -size=1000 -unit=B -path=./disco.dsk -name=particionDos
 fdisk -size=900 -unit=B -path=./disco.dsk -name=particionTres
+pause
 fdisk -size=1000 -unit=B -path=./disco.dsk -name=particionTres
 fdisk -size=800 -unit=B -path=./disco.dsk -name=particionCuatro

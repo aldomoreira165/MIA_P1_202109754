@@ -1,18 +1,34 @@
 import os
 from elementos.disco import *
 from elementos.mbr import Mbr
+from comandos.comando import particiones_montadas
 
 def execute_rep(args):
     if args.name == "mbr":
         reporte_mbr(args.path, args.id)
+    elif args.name == "disk":
+        reporte_mbr(args.path, args.id)
 
-def reporte_mbr(disco, particion):
+def reporte_disk(ruta, id):
+    print("reporte disk")
+            
+
+def reporte_mbr(ruta, id):
     #abrir disco y obtener particion
     try:
+        #buscar id en particiones montadas
+        elemento_encontrado = None
+
+        for elemento in particiones_montadas:
+            if elemento[0] == id:
+                elemento_encontrado = elemento
+                break
+
         mbrDisco = Mbr()
-        obtenerDatosDisco(disco, 0, mbrDisco)
+        obtenerDatosDisco(elemento_encontrado[2], 0, mbrDisco)
         mbrDisco.display_info()
 
+        
         #generando codigo .dot del mbr
         dot = "digraph mbr{\n"
         dot += "a0 [shape=none label=<\n"
@@ -31,7 +47,7 @@ def reporte_mbr(disco, particion):
         f.close()
 
         os.system("dot -Tpng mbr.dot -o mbr.png")
-        os.system("./mbr.png")
+        os.system(f"{ruta}")
 
 
     except Exception as e:

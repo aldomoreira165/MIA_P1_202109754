@@ -19,7 +19,7 @@ class ebr(ctypes.Structure):
         self.fit = b'\0'
         self.start = 0
         self.s = 0
-        self.next = 0
+        self.next = -1
         self.name = b'\0' * 16
  
     def set_status(self, status):
