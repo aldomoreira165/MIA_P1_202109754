@@ -1,7 +1,7 @@
 import os
 from elementos.disco import *
 from elementos.mbr import Mbr
-from comandos.comando import particiones_montadas
+from comandos.mount import particiones_montadas
 
 def execute_rep(args):
     if args.name == "mbr":

@@ -10,47 +10,6 @@ from elementos.disco import *
 from funciones.utilities import coding_str
 from elementos.ebr import Ebr
 
-particiones_montadas = []
-
-def execute_mkdisk(args):
-    if args.size > 0:
-
-        try:
-            #creando disco
-            discoCreado = crearDisco(args.path)
-
-            #creando espacio de disco
-            establecerEspacioDisco(discoCreado, args.size, args.unit)
-
-            #creando mbr de disco
-            mbr = Mbr()
-            bytes = obtener_total_bytes(args.size, args.unit)
-            date = coding_str(datetime.datetime.now().strftime("%d/%m/%Y %H:%M"), 16)
-            mbr.set_infomation(bytes, date, args.fit)
-
-            #generando objeto mbr en el disco
-            generarDatosDisco(discoCreado, 0, mbr)
-            
-            discoCreado.close()
-
-            #leer 
-            mbrDEs = Mbr()
-            obtenerDatosDisco(args.path, 0, mbrDEs)
-            mbrDEs.display_info()
-            
-        except Exception as e:
-            print(f"Error configurando disco: {e}")
-    else:
-        print("Error: El tamaño del disco debe ser positivo y mayor que 0.")
-        
-def execute_rmdisk(args):   
-    confirmacion = (input("Esta seguro que desea eliminar el disco? (S/N): ")).lower()
-    if confirmacion == "s":
-        eliminarDisco(args.path)
-    else:
-        print("Eliminacion de disco cancelada") 
-
-
 def execute_fdisk(args):
     if args.delete:
             nombre_particion = "b'" + args.name + "'"
@@ -304,8 +263,8 @@ def caseExtendida(mbr, disco, numParticion):
 def setDataEBR(discoAbierto, inicio, size, name):
     ebr = Ebr()
 
-    ebr.status = coding_str("0", 1)
-    ebr.fit = coding_str("0", 1)
+    ebr.status = coding_str("\0", 1)
+    ebr.fit = coding_str("\0", 1)
     ebr.start = inicio
     ebr.s = size
     ebr.next = -1
@@ -406,145 +365,6 @@ def settearDatosParticion(mbr, numero_particion, name, fit, type, unit, size):
                 else:
                     print("unidad de particion incorrecta")
 
-def execute_mount(args):
-    if os.path.exists(args.path):
-        mbrDisco = Mbr()
-
-        #obteniendo datos del mbr
-        obtenerDatosDisco(args.path, 0, mbrDisco)
-
-        digitos_carnet = "54"
-        nombre_disco = os.path.splitext(os.path.basename(args.path))[0]
-        nombre_buscar = "b'" + args.name + "'"
-
-        #buscar la particion a cargar en base al nombre
-        if str(mbrDisco.particion1.get_name()) == nombre_buscar:
-            numero_particion = "1"
-            id_particion = digitos_carnet + numero_particion + nombre_disco
-            if id_particion in particiones_montadas:
-                print("Error: particion ya montada")
-            else:
-                particion_a_montar = [id_particion, mbrDisco.particion1, args.path]
-                particiones_montadas.append(particion_a_montar)
-                print("Particion montada correctamente")
-                print("Particiones montadas: ", particiones_montadas)
-        elif str(mbrDisco.particion2.get_name()) == nombre_buscar: 
-            numero_particion = "2"
-            id_particion = digitos_carnet + numero_particion + nombre_disco
-            if id_particion in particiones_montadas:
-                print("Error: particion ya montada")
-            else:
-                particion_a_montar = [id_particion, mbrDisco.particion2, args.path]
-                particiones_montadas.append(particion_a_montar)
-                print("Particion montada correctamente")
-                print("Particiones montadas: ", particiones_montadas)
-        elif str(mbrDisco.particion3.get_name()) == nombre_buscar:
-            numero_particion = "3"
-            id_particion = digitos_carnet + numero_particion + nombre_disco
-            if id_particion in particiones_montadas:
-                print("Error: particion ya montada")
-            else:
-                particion_a_montar = [id_particion, mbrDisco.particion3, args.path]
-                particiones_montadas.append(particion_a_montar)
-                print("Particion montada correctamente")
-                print("Particiones montadas: ", particiones_montadas)
-        elif str(mbrDisco.particion4.get_name()) == nombre_buscar:
-            numero_particion = "4"
-            id_particion = digitos_carnet + numero_particion + nombre_disco
-            if id_particion in particiones_montadas:
-                print("Error: particion ya montada")
-            else:
-                particion_a_montar = [id_particion, mbrDisco.particion4, args.path]
-                particiones_montadas.append(particion_a_montar)
-                print("Particion montada correctamente")
-                print("Particiones montadas: ", particiones_montadas)
-        else:
-            print("Error: particion no encontrada")
-
-    else:
-        print("Error: El disco no existe.")
-
-def execute_unmount(args):
-    id = args.id
-    elemento_encontrado = None
-
-    for elemento in particiones_montadas:
-        if elemento[0] == id:
-            elemento_encontrado = elemento
-            break
-
-    if elemento_encontrado:
-        particiones_montadas.remove(elemento_encontrado)
-        print("Particion desmontada correctamente")
-        print("Particiones montadas: ", particiones_montadas)
-    else:
-        print("Error: particion no encontrada")
-
-def execute_mkfs(args):
-    particion_montada = None
-    for particion in particiones_montadas:
-        if particion[0] == args.id:
-            particion_montada = particion
-            break
-
-    if particion_montada == None:
-        print("Error: particion no montada")
-    else:
-        numerador = particion_montada[1].s - struct.calcsize(Superblock().getConst())
-        denominador = 4 + struct.calcsize(Inode().getConst()) + 3 * struct.calcsize(Fileblock().getConst())
-        temp = 0 if args.fs == 2 else 0
-        n = math.floor(numerador / denominador)
-
-        #creando superbloque
-        new_superblock = Superblock()
-        new_superblock.inodes_count = 0
-        new_superblock.blocks_count = 0
-        new_superblock.free_blocks_count = 3 * n
-        new_superblock.free_inodes_count = n
-        date = coding_str(datetime.datetime.now().strftime("%d/%m/%Y %H:%M"), 16)
-        new_superblock.mtime = date
-        new_superblock.umtime = date
-        new_superblock.mcount = 1
-
-        if args.fs == "2fs":
-            create_ext2(n, particion_montada, new_superblock, date)
-        elif args.fs == 3:
-            pass
-
-
-def create_ext2(n, mPartition, new_superblock, date):
-    new_superblock.filesystem_type = 2
-    new_superblock.bm_inode_start = mPartition[1].start + struct.calcsize(Superblock().getConst())
-    new_superblock.bm_block_start = new_superblock.bm_inode_start + n
-    new_superblock.inode_start = new_superblock.bm_block_start +    3 * n
-    new_superblock.block_start = new_superblock.inode_start + n * struct.calcsize(Inode().getConst())
-
-    new_superblock.free_inodes_count -= 1
-    new_superblock.free_blocks_count -= 1
-    new_superblock.free_inodes_count -= 1
-    new_superblock.free_blocks_count -= 1
-
-    Crr_file = open(mPartition[2], "rb+")
-    generarDatosDisco(Crr_file, mPartition[1].start, new_superblock)
-
-    zero = '0'
-
-    for i in range(n):
-        generarDatosDisco(Crr_file, new_superblock.bm_inode_start + i, zero)
-
-    for i in range(3 * n):
-        generarDatosDisco(Crr_file, new_superblock.bm_block_start + i, zero)
-
-    new_inode = Inode()
-    for i in range(n): 
-        generarDatosDisco(Crr_file, new_superblock.inode_start + i * struct.calcsize(Inode().getConst()), new_inode)
-
-    new_Fileblock = Fileblock()
-    for i in range(3 * n):
-        generarDatosDisco(Crr_file, new_superblock.block_start + i * struct.calcsize(Fileblock().getConst()), new_Fileblock)
-
-    Crr_file.close()
-    print("Sistema de archivos creado exitosamente")
 #funcion para verificar si ya existe particion extendida
 def verificar_particion_extendida(mbr):
     if mbr.particion1.type == b'e' or mbr.particion2.type == b'e' or mbr.particion3.type == b'e' or mbr.particion4.type == b'e':
@@ -619,5 +439,3 @@ def actualizar_start_particiones(disco, mbr):
         mbr.particion4.set_start(mbr_espacio + mbr.particion1.s + mbr.particion2.s + mbr.particion3.s)
 
     actualizarParticionesMBR(disco, mbr)
-
-#python main.py execute -path=./hola.txt

@@ -3,7 +3,12 @@ import os
 import argparse
 import shlex
 from funciones.utilities import printConsole,printError
-from comandos.comando import *
+from comandos.fdisk import *
+from comandos.mkdisk import *
+from comandos.mkfs import *
+from comandos.mount import *
+from comandos.rmdisk import *
+from comandos.unmount import *
 from comandos.reportes import execute_rep
 
 
