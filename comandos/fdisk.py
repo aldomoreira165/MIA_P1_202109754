@@ -151,21 +151,25 @@ def execute_fdisk(args):
                             actualizarParticionesMBR(args.path, mbrDisco)
                             actualizar_start_particiones(args.path, mbrDisco)
                             caseExtendida(mbrDisco, args.path, 1)
+                            caseLogica(mbrDisco, args.path, 1, args.fit, args.size, args.name)
                         elif mbrDisco.particion2.s == 0:
                             settearDatosParticion(mbrDisco, 2, args.name, args.fit, args.type, args.unit, args.size)
                             actualizarParticionesMBR(args.path, mbrDisco)
                             actualizar_start_particiones(args.path, mbrDisco)
                             caseExtendida(mbrDisco, args.path, 2)
+                            caseLogica(mbrDisco, args.path, 2, args.fit, args.size, args.name)
                         elif mbrDisco.particion3.s == 0:
                             settearDatosParticion(mbrDisco, 3, args.name, args.fit, args.type, args.unit, args.size)
                             actualizarParticionesMBR(args.path, mbrDisco)
                             actualizar_start_particiones(args.path, mbrDisco)
                             caseExtendida(mbrDisco, args.path, 3)
+                            caseLogica(mbrDisco, args.path, 3, args.fit, args.size, args.name)
                         elif mbrDisco.particion4.s == 0:
                             settearDatosParticion(mbrDisco, 4, args.name, args.fit, args.type, args.unit, args.size)
                             actualizarParticionesMBR(args.path, mbrDisco)
                             actualizar_start_particiones(args.path, mbrDisco)
                             caseExtendida(mbrDisco, args.path, 4)
+                            caseLogica(mbrDisco, args.path, 4, args.fit, args.size, args.name)
                         else:
                             print("Ya no existen particiones libres")
 
@@ -249,61 +253,72 @@ def caseLogica(mbr, disco, numParticion, fitParticion, sizeParticion, nombrePart
         else:  
             puntero += len(ebrActual.doSerialize()) + ebrActual.s
 
-    
+    #actualizando ebr
+    part_start = ebrActual.start
+    part_next = part_start + sizeParticion
+    ebrActual.set_infomation('0', fitParticion, part_start, sizeParticion, part_next, nombreParticion)
+    generarDatosDisco(disco, puntero, ebrActual)
+
+    #imprimir unos en el espacio de la particion logica
+    uno = b'1'
+    rango = part_next - part_start
+    for i in range(rango):
+        disco.write(uno)
+
+    #generar un mbr vacio en la posicion despues de la particion logica
+    ebrUltimo = Ebr()
+    startNext = part_next + len(ebrActual.doSerialize())
+    ebrUltimo.set_infomation('0', '0', startNext, -1, -1, "noName")
+
 
 def caseExtendida(mbr, disco, numParticion):
     extendida = False
     inicio = -1
     size = 0
-    name = ""
 
     if numParticion == 1:
         if mbr.particion1.type == b'e':
             inicio = mbr.particion1.start
             size = mbr.particion1.s
-            name = mbr.particion1.get_name()
             extendida = True
  
             if extendida:
                 with open(disco, "rb+") as discoAbierto:
-                    setDataEBR(discoAbierto, inicio, size, name)
+                    setDataEBR(discoAbierto, inicio, size)
 
     elif numParticion == 2:
         if mbr.particion2.type == b'e':
             inicio = mbr.particion2.start
             size = mbr.particion2.s
-            name = mbr.particion2.get_name()
             extendida = True
             
             if extendida:
                 with open(disco, "rb+") as discoAbierto:
-                    setDataEBR(discoAbierto, inicio, size, name)
+                    setDataEBR(discoAbierto, inicio, size)
 
     elif numParticion == 3:
         if mbr.particion3.type == b'e':
             inicio = mbr.particion3.start
             size = mbr.particion3.s
-            name = mbr.particion3.get_name()
             extendida = True
             
             if extendida:
                 with open(disco, "rb+") as discoAbierto:
-                    setDataEBR(discoAbierto, inicio, size, name)
+                    setDataEBR(discoAbierto, inicio, size)
     elif numParticion == 4:
         if mbr.particion4.type == b'e':
             inicio = mbr.particion4.start
             size = mbr.particion4.s
-            name = mbr.particion4.get_name()
             extendida = True
 
             if extendida:
                 with open(disco, "rb+") as discoAbierto:
-                    setDataEBR(discoAbierto, inicio, size, name)      
+                    setDataEBR(discoAbierto, inicio, size)      
 
-def setDataEBR(discoAbierto, inicio, size, name):
+def setDataEBR(discoAbierto, inicio, size):
     ebr = Ebr()
-    nameString = decode_str(name)
-    ebr.set_infomation('0', '0', inicio, size, -1, nameString)
+    part_start = inicio + len(ebr.doSerialize())
+    ebr.set_infomation('0', '0', part_start, -1, -1, "noName")
     generarDatosDisco(discoAbierto, inicio, ebr)
 
     uno = b'1'
