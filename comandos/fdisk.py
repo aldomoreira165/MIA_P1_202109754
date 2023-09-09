@@ -1,13 +1,10 @@
 import os
-import struct
-import math
-import datetime
 from elementos.superbloque import *
 from elementos.inodo import *
 from elementos.bloque_archivos import *
 from elementos.mbr import Mbr
 from elementos.disco import *
-from funciones.utilities import coding_str
+from funciones.utilities import coding_str, decode_str
 from elementos.ebr import Ebr
 
 def execute_fdisk(args):
@@ -262,21 +259,9 @@ def caseExtendida(mbr, disco, numParticion):
 
 def setDataEBR(discoAbierto, inicio, size, name):
     ebr = Ebr()
-
-    ebr.status = coding_str("\0", 1)
-    ebr.fit = coding_str("\0", 1)
-    ebr.start = inicio
-    ebr.s = size
-    ebr.next = -1
-    ebr.name = coding_str("discoHola", 16)
-
-    print("antes")
-    ebr.display_info()
+    nameString = decode_str(name)
+    ebr.set_infomation('0', '0', inicio, size, -1, nameString)
     generarDatosDisco(discoAbierto, inicio, ebr)
-    print("despues")
-    ebr.display_info()
-    print("size", size)
-    print("inicio", inicio)
 
 def settearDatosParticion(mbr, numero_particion, name, fit, type, unit, size):
     nombres_particiones = [str(mbr.particion1.get_name()), str(mbr.particion2.get_name()), str(mbr.particion3.get_name()), str(mbr.particion4.get_name())]

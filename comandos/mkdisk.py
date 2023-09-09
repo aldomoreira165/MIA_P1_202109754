@@ -8,7 +8,6 @@ from funciones.utilities import coding_str
 
 def execute_mkdisk(args):
     if args.size > 0:
-
         try:
             #creando disco
             discoCreado = crearDisco(args.path)
@@ -19,7 +18,7 @@ def execute_mkdisk(args):
             #creando mbr de disco
             mbr = Mbr()
             bytes = obtener_total_bytes(args.size, args.unit)
-            date = coding_str(datetime.datetime.now().strftime("%d/%m/%Y %H:%M"), 16)
+            date = datetime.datetime.now().strftime("%d/%m/%Y %H:%M")
             mbr.set_infomation(bytes, date, args.fit)
 
             #generando objeto mbr en el disco

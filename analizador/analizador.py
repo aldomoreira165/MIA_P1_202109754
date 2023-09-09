@@ -9,7 +9,7 @@ from comandos.mkfs import *
 from comandos.mount import *
 from comandos.rmdisk import *
 from comandos.unmount import *
-from comandos.reportes import execute_rep
+from comandos.rep import execute_rep
 
 
 def Commands():

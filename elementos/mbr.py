@@ -29,7 +29,7 @@ class Mbr(ctypes.Structure):
         self.tamano = tamano
 
     def set_time(self, time):
-        self.time= time
+        self.time = coding_str(time, 17)
 
     def set_fit(self, fit):
         self.fit = coding_str(fit, 1)
