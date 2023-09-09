@@ -208,6 +208,49 @@ def execute_fdisk(args):
         else:
             print("Error: El tamaño de la particion (-size) es obligatorio.")
 
+def caseLogica(mbr, disco, numParticion, fitParticion, sizeParticion, nombreParticion):
+
+    puntero = -1
+    size = -1
+    ebrActual = Ebr()
+    
+
+#verificar que exista ebr vacio
+#actualizar los datos del ebr con los de la particion logica
+#en base al tamanio generar unos en el disco
+
+#-1 next
+#verificar espacio 
+    
+    #obteniendo el puntero del primer ebr
+    if numParticion == 1:
+        if mbr.particion1.type == b'e':
+            puntero = mbr.particion1.start
+            size = mbr.particion1.s
+    elif numParticion == 2:
+        if mbr.particion2.type == b'e':
+            puntero = mbr.particion2.start
+            size = mbr.particion2.s
+    elif numParticion == 3:
+        if mbr.particion3.type == b'e':
+            puntero = mbr.particion3.start
+            size = mbr.particion3.s
+    elif numParticion == 4:
+        if mbr.particion4.type == b'e':
+            puntero = mbr.particion4.start
+            size = mbr.particion4.s
+
+    #obteniendo el ebr
+    while puntero < puntero + size:
+        ebrActual = Ebr()
+        obtenerDatosDisco(disco, puntero, ebrActual)
+        if ebrActual.next == -1:
+            break
+        else:  
+            puntero += len(ebrActual.doSerialize()) + ebrActual.s
+
+    
+
 def caseExtendida(mbr, disco, numParticion):
     extendida = False
     inicio = -1
@@ -262,6 +305,13 @@ def setDataEBR(discoAbierto, inicio, size, name):
     nameString = decode_str(name)
     ebr.set_infomation('0', '0', inicio, size, -1, nameString)
     generarDatosDisco(discoAbierto, inicio, ebr)
+
+    uno = b'1'
+    rango = size - len(ebr.doSerialize())
+
+    #generar unos en el espacio libre de la particion extendida
+    for i in range(rango):
+        discoAbierto.write(uno)
 
 def settearDatosParticion(mbr, numero_particion, name, fit, type, unit, size):
     nombres_particiones = [str(mbr.particion1.get_name()), str(mbr.particion2.get_name()), str(mbr.particion3.get_name()), str(mbr.particion4.get_name())]
@@ -389,8 +439,7 @@ def set_tipo_particion(mbr, numero_particion, type):
             print("Error: no existe particion extendida")
             return False
         else:
-            
-            print("Creando particion logica")
+            mbr.particion1.set_type(type)
             return True
 
 #funcion para verificar si existe espacio en el disco

@@ -4,7 +4,6 @@ from elementos.inodo import *
 from elementos.bloque_archivos import *
 from elementos.mbr import Mbr
 from elementos.disco import *
-from funciones.utilities import coding_str
 
 def execute_mkdisk(args):
     if args.size > 0:
