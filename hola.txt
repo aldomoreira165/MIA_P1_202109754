@@ -38,6 +38,7 @@ fdisk -size=300 -path=./Disco.dsk -name=Particion1
 fdisk -type=E -path=./Disco.dsk -unit=K -name=Particion2 -size=300
 
 execute -path=./coms.adsj
+mkdisk -size=3000 -unit=K -path=./Disco.dsk
 fdisk -delete=full -name=particionDos -path=./disco.dsk
 fdisk -add=200 -unit=B -path=./disco.dsk -name=particionUno
 rep -name=mbr -path=./disco.dsk -id=particion

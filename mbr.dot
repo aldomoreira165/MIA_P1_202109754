@@ -1,0 +1,30 @@
+digraph mbr{
+a0 [shape=none label=<
+<TABLE cellspacing="10" cellpadding="10" style="rounded" bgcolor="red">
+ <TR><TD bgcolor="yellow">REPORTE MBR</TD></TR>
+<TR><TD bgcolor="yellow">mbr_tamano</TD><TD bgcolor="yellow">3072000</TD></TR>
+ <TR><TD bgcolor="yellow">mbr_fecha_creacion</TD><TD bgcolor="yellow">b'10/09/2023 12:15'</TD></TR>
+<TR><TD bgcolor="yellow">mbr_disk_signature</TD><TD bgcolor="yellow">159</TD></TR>
+ <TR><TD bgcolor="yellow">PARTICION EXTENDIDA</TD></TR>
+<TR><TD bgcolor="yellow">part_status</TD><TD bgcolor="yellow">b'\x00'</TD></TR>
+<TR><TD bgcolor="yellow">part_type</TD><TD bgcolor="yellow">b'e'</TD></TR>
+<TR><TD bgcolor="yellow">part_fit</TD><TD bgcolor="yellow">b'w'</TD></TR>
+<TR><TD bgcolor="yellow">part_start</TD><TD bgcolor="yellow">341</TD></TR>
+<TR><TD bgcolor="yellow">part_size</TD><TD bgcolor="yellow">300</TD></TR>
+<TR><TD bgcolor="yellow">part_name</TD><TD bgcolor="yellow">b'particionpa'</TD></TR>
+ <TR><TD bgcolor="yellow">PARTICION LOGICA</TD></TR>
+<TR><TD bgcolor="yellow">part_status</TD><TD bgcolor="yellow">b'0'</TD></TR>
+<TR><TD bgcolor="yellow">part_fit</TD><TD bgcolor="yellow">b'w'</TD></TR>
+<TR><TD bgcolor="yellow">part_start</TD><TD bgcolor="yellow">373</TD></TR>
+<TR><TD bgcolor="yellow">part_size</TD><TD bgcolor="yellow">50</TD></TR>
+<TR><TD bgcolor="yellow">part_next</TD><TD bgcolor="yellow">423</TD></TR>
+<TR><TD bgcolor="yellow">part_name</TD><TD bgcolor="yellow">b'particionl1'</TD></TR>
+ <TR><TD bgcolor="yellow">PARTICION LOGICA</TD></TR>
+<TR><TD bgcolor="yellow">part_status</TD><TD bgcolor="yellow">b'0'</TD></TR>
+<TR><TD bgcolor="yellow">part_fit</TD><TD bgcolor="yellow">b'0'</TD></TR>
+<TR><TD bgcolor="yellow">part_start</TD><TD bgcolor="yellow">455</TD></TR>
+<TR><TD bgcolor="yellow">part_size</TD><TD bgcolor="yellow">-1</TD></TR>
+<TR><TD bgcolor="yellow">part_next</TD><TD bgcolor="yellow">-1</TD></TR>
+<TR><TD bgcolor="yellow">part_name</TD><TD bgcolor="yellow">b'noName'</TD></TR>
+</TABLE>>];
+}

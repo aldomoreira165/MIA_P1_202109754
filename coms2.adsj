@@ -2,5 +2,10 @@ mkdisk -path=./Disco.dsk -unit=K -size=3000
 fdisk -size=200 -unit=B -path=./disco.dsk -name=particionUno
 fdisk -size=220 -unit=B -path=./disco.dsk -name=particionDos
 fdisk -size=900 -unit=B -path=./disco.dsk -name=particionTres
+fdisk -type=E -path=./Disco.dsk -unit=B -name=ParticionPa -size=300
+fdisk -type=l -path=./Disco.dsk -unit=B -name=Particionl1 -size=50
+fdisk -type=l -path=./Disco.dsk -unit=B -name=Particionl2 -size=30
 fdisk -add=-50 -unit=B -path=./disco.dsk -name=particionUno
 fdisk -delete=full -path=./disco.dsk -name=particionDos
+mount -path=./disco.dsk -name=particionUno
+rep -name=mbr -path=./disco.dsk -id=541disco
