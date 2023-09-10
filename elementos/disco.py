@@ -37,8 +37,6 @@ def establecerEspacioDisco(archivo, espacio, unidad):
     for i in range(times_to_write):
         archivo.write(buffer)
 
-    #print("Espacio establecido correctamente")
-
 
 def generarDatosDisco(archivo, desplazamiento, objeto):
     try:
@@ -46,20 +44,15 @@ def generarDatosDisco(archivo, desplazamiento, objeto):
         datos = objeto.doSerialize()
         archivo.seek(desplazamiento)
         archivo.write(datos)
-        #print("escritura correcta")
     except Exception as e:
         print(f"Error en escritura disco: {e}")
 
 def obtenerDatosDisco(nombre, desplazamiento,objeto):
     with open(nombre, "rb") as fileOpen:
         try:
-            #print("Reading in: ", desplazamiento)
-            #print("Size: ",  ctypes.sizeof(obj))
             fileOpen.seek(desplazamiento)
             data = fileOpen.read(len(objeto.doSerialize()))
-            #print("Size data: ",  len(data))
             objeto.doDeserialize(data)
-            #print("lectura correcta")
         except Exception as e:
             print(f"Error reading object err: {e}")
 

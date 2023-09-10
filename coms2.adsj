@@ -1,0 +1,6 @@
+mkdisk -path=./Disco.dsk -unit=K -size=3000
+fdisk -size=200 -unit=B -path=./disco.dsk -name=particionUno
+fdisk -size=1000 -unit=B -path=./disco.dsk -name=particionDos
+fdisk -size=900 -unit=B -path=./disco.dsk -name=particionTres
+fdisk -add=-50 -unit=B -path=./disco.dsk -name=particionUno
+fdisk -delete=full -path=./disco.dsk -name=particionDos
