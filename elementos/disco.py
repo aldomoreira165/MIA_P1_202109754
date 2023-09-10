@@ -63,3 +63,22 @@ def obtener_total_bytes(size, unit):
         return size * 1024 * 1024
     else:
         return "Error de unidad"
+    
+
+def ocuparEspacio(disco, desplazamiento, rango):
+    try:
+        disco.seek(desplazamiento)
+        uno = b'1'
+        for i in range(rango):
+            disco.write(uno)
+    except Exception as e:
+        print(f"Error en consumo disco: {e}")
+        
+def ocuparEspacioLogic(disco, desplazamiento, rango):
+    try:
+        disco.seek(desplazamiento)
+        uno = b'2'
+        for i in range(rango):
+            disco.write(uno)
+    except Exception as e:
+        print(f"Error en consumo disco: {e}")

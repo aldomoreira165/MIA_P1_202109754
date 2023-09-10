@@ -41,14 +41,6 @@ class Particion(ctypes.Structure):
     def set_name(self, name):
         self.name = coding_str(name, 16)
 
-    def set_infomation(self, status, type, fit, start, s, name):
-        self.set_status = status
-        self.set_type = type
-        self.fit = fit
-        self.start = start
-        self.s = s
-        self.name = name
-
     def get_const(self):
         return const
     

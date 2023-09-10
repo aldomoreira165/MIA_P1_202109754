@@ -1,4 +1,5 @@
 from funciones.utilities import coding_str
 
-var = coding_str("PrimerDiscoDuro", 5)
-print(var)
+cadena ="222222222222222222222222222222"
+
+print(len(cadena))

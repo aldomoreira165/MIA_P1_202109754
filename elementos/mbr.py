@@ -61,12 +61,11 @@ class Mbr(ctypes.Structure):
         print(f"fit: {self.fit}")
         print(f"dsk_signature: {self.dsk_signature}")
 
-        """print(f"particion 1: {self.particion1}")
-        print(f"particion 2: {self.particion2}")
-        print(f"particion 3: {self.particion3}")
-        print(f"particion 4: {self.particion4}")"""
+        print(f"particion 1: {self.particion1.display_info()}")
+        print(f"particion 2: {self.particion2.display_info()}")
+        print(f"particion 3: {self.particion3.display_info()}")
+        print(f"particion 4: {self.particion4.display_info()}")
         
-
     def doSerialize(self):
         mbr_data = struct.pack(const, self.tamano, self.time, self.dsk_signature, self.fit)
         particiones_data = self.particion1.doSerialize()+ self.particion2.doSerialize() + self.particion3.doSerialize() + self.particion4.doSerialize() 

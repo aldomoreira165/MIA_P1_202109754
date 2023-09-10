@@ -1,3 +1,4 @@
 mkdisk -path=./Disco.dsk -unit=K -size=3000
-fdisk -type=E -path=./Disco.dsk -unit=K -name=ParticionPa -size=300
-fdisk -type=l -path=./Disco.dsk -unit=K -name=Particionl1 -size=300
+fdisk -type=E -path=./Disco.dsk -unit=B -name=ParticionPa -size=300
+fdisk -type=l -path=./Disco.dsk -unit=B -name=Particionl1 -size=50
+fdisk -type=l -path=./Disco.dsk -unit=B -name=Particionl2 -size=30
