@@ -5,7 +5,9 @@ fdisk -size=900 -unit=B -path=./disco.dsk -name=particionTres
 fdisk -type=E -path=./Disco.dsk -unit=B -name=ParticionPa -size=300
 fdisk -type=l -path=./Disco.dsk -unit=B -name=Particionl1 -size=50
 fdisk -type=l -path=./Disco.dsk -unit=B -name=Particionl2 -size=30
+fdisk -type=l -path=./Disco.dsk -unit=B -name=Particionl3 -size=100
 fdisk -add=-50 -unit=B -path=./disco.dsk -name=particionUno
 fdisk -delete=full -path=./disco.dsk -name=particionDos
 mount -path=./disco.dsk -name=particionUno
-rep -name=mbr -path=./disco.dsk -id=541disco
+rep -name=mbr -path=/home/aldo/graficas/mbr/unidad.png -id=541disco
+rep -name=disk -path=/home/aldo/graficas/disk/unidad.png -id=541disco
