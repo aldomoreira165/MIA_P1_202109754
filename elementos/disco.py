@@ -72,13 +72,13 @@ def ocuparEspacio(disco, desplazamiento, rango):
         for i in range(rango):
             disco.write(uno)
     except Exception as e:
-        print(f"Error en consumo disco: {e}")
-        
-def ocuparEspacioLogic(disco, desplazamiento, rango):
+        print(f"Error en cambio disco: {e}")
+
+def desocuparEspacio(disco, desplazamiento, rango):
     try:
         disco.seek(desplazamiento)
-        uno = b'2'
+        cero = b'\0'
         for i in range(rango):
-            disco.write(uno)
+            disco.write(cero)
     except Exception as e:
-        print(f"Error en consumo disco: {e}")
+        print(f"Error en cambio disco: {e}")

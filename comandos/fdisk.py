@@ -23,6 +23,10 @@ def execute_fdisk(args):
                     confirmacion = (input("Esta seguro que desea eliminar la particion? (S/N): ")).lower()
                     if confirmacion == "s":
                         mbrDisco.particion1.eliminar()
+
+                        with open(args.path, "rb+") as discoAbierto:
+                            desocuparEspacio(discoAbierto, mbrDisco.particion1.start, mbrDisco.particion1.s)
+
                         actualizarParticionesMBR(args.path, mbrDisco)
                         actualizar_start_particiones(args.path)
                         print("particion eliminada exitosamente")
@@ -32,6 +36,10 @@ def execute_fdisk(args):
                     confirmacion = (input("Esta seguro que desea eliminar la particion? (S/N): ")).lower()
                     if confirmacion == "s":
                         mbrDisco.particion2.eliminar()
+
+                        with open(args.path, "rb+") as discoAbierto:
+                            desocuparEspacio(discoAbierto, mbrDisco.particion2.start, mbrDisco.particion2.s)
+
                         actualizarParticionesMBR(args.path, mbrDisco)
                         actualizar_start_particiones(args.path)
                         print("particion eliminada exitosamente")
@@ -41,6 +49,10 @@ def execute_fdisk(args):
                     confirmacion = (input("Esta seguro que desea eliminar la particion? (S/N): ")).lower()
                     if confirmacion == "s":
                         mbrDisco.particion3.eliminar()
+
+                        with open(args.path, "rb+") as discoAbierto:
+                            desocuparEspacio(discoAbierto, mbrDisco.particion3.start, mbrDisco.particion3.s)
+
                         actualizarParticionesMBR(args.path, mbrDisco)
                         actualizar_start_particiones(args.path)
                         print("particion eliminada exitosamente")
@@ -50,6 +62,10 @@ def execute_fdisk(args):
                     confirmacion = (input("Esta seguro que desea eliminar la particion? (S/N): ")).lower()
                     if confirmacion == "s":
                         mbrDisco.particion4.eliminar()
+
+                        with open(args.path, "rb+") as discoAbierto:
+                            desocuparEspacio(discoAbierto, mbrDisco.particion4.start, mbrDisco.particion4.s)
+
                         actualizarParticionesMBR(args.path, mbrDisco)
                         actualizar_start_particiones(args.path)
                         print("particion eliminada exitosamente")
@@ -160,35 +176,13 @@ def execute_fdisk(args):
                         obtenerDatosDisco(args.path, 0, mbrActualizado)
                         print("=====================particiones========================")
                         mbrActualizado.particion1.display_info()
-                        if mbrActualizado.particion1.type == b'e':
-                            print("--extendida--")
-                            ebr = Ebr()
-                            obtenerDatosDisco(args.path, mbrActualizado.particion1.start, ebr)
-                            ebr.display_info()
                         print("*******************************************")
                         mbrActualizado.particion2.display_info()
-                        if mbrActualizado.particion2.type == b'e':
-                            print("--extendida--")
-                            ebr = Ebr()
-                            obtenerDatosDisco(args.path, mbrActualizado.particion2.start, ebr)
-                            ebr.display_info()
                         print("*******************************************")
                         mbrActualizado.particion3.display_info()
-                        if mbrActualizado.particion3.type == b'e':
-                            print("--extendida--")
-                            ebr = Ebr()
-                            obtenerDatosDisco(args.path, mbrActualizado.particion3.start, ebr)
-                            ebr.display_info()
                         print("*******************************************")
                         mbrActualizado.particion4.display_info()
-                        if mbrActualizado.particion4.type == b'e':
-                            print("--extendida--")
-                            ebr = Ebr()
-                            obtenerDatosDisco(args.path, mbrActualizado.particion4.start, ebr)
-                            ebr.display_info()
                         print("*******************************************")
-                        print("mostrando info de particiones")
-                        mbrActualizado.display_info()
                     else:
                         espacio_libre = mbrDisco.tamano - espacio_ocupado
                         print("Error: no hay espacio suficiente en el disco. Espacio libre: ", espacio_libre)
@@ -250,7 +244,7 @@ def caseLogica(rutaDisco, fitParticion, sizeParticion, nombreParticion):
 
     with open(rutaDisco, "rb+") as discoAbierto:
         rango = part_next - part_start
-        ocuparEspacioLogic(discoAbierto, part_start, rango)
+        ocuparEspacio(discoAbierto, part_start, rango)
 
     with open(rutaDisco, "rb+") as discoAbierto:
             #generar un mbr vacio en la posicion despues de la particion logica
@@ -332,6 +326,9 @@ def settearDatosParticion(mbr, path, numero_particion, name, fit, type, unit, si
                     actualizarParticionesMBR(path, mbr)
                     actualizar_start_particiones(path)
 
+                    with open(path, "rb+") as discoAbierto:
+                        ocuparEspacio(discoAbierto, inicio, mbr.particion1.s)
+
                     if mbr.particion1.type == b'e':
                         caseExtendida(mbr, path, 1)
                 else:
@@ -364,6 +361,10 @@ def settearDatosParticion(mbr, path, numero_particion, name, fit, type, unit, si
                 if mbr.particion2.type != b'l':
                     actualizarParticionesMBR(path, mbr)
                     actualizar_start_particiones(path)
+                    
+                    if mbr.particion2.type == b'p':
+                        with open(path, "rb+") as discoAbierto:
+                            ocuparEspacio(discoAbierto, inicio, mbr.particion2.s)
 
                     if mbr.particion2.type == b'e':
                         caseExtendida(mbr, path, 2)
@@ -397,6 +398,10 @@ def settearDatosParticion(mbr, path, numero_particion, name, fit, type, unit, si
                 if mbr.particion3.type != b'l':
                     actualizarParticionesMBR(path, mbr)
                     actualizar_start_particiones(path)
+                    
+                    if mbr.particion3.type == b'p':
+                        with open(path, "rb+") as discoAbierto:
+                            ocuparEspacio(discoAbierto, inicio, mbr.particion3.s)
 
                     if mbr.particion3.type == b'e':
                         caseExtendida(mbr, path, 3)
@@ -430,6 +435,11 @@ def settearDatosParticion(mbr, path, numero_particion, name, fit, type, unit, si
                 if mbr.particion4.type != b'l':
                     actualizarParticionesMBR(path, mbr)
                     actualizar_start_particiones(path)
+                    ocuparEspacio(path, inicio, inicio + mbr.particion4.s)
+
+                    if mbr.particion4.type == b'p':
+                        with open(path, "rb+") as discoAbierto:
+                            ocuparEspacio(discoAbierto, inicio, mbr.particion4.s)
 
                     if mbr.particion4.type == b'e':
                         caseExtendida(mbr, path, 4)
