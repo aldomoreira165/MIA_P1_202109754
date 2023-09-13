@@ -140,7 +140,7 @@ def fn_fdisk(split_args):
         parser.add_argument("-unit", required=False, choices=["b","k", "m"], default="k", help="Unidad de tamaño (opcional)")
         parser.add_argument("-type", required=False, choices=["p", "e", "l"], default="p", help="Tipo de particion (opcional)")
         parser.add_argument("-fit", required=False, choices=["bf", "ff", "wf"], default="wf",help="Tipo de ajuste de disco (opcional)")
-        parser.add_argument("-add", required=False, help="Agregar espacio a la particion (opcional)")
+        parser.add_argument("-add", type=int, required=False, help="Agregar espacio a la particion (opcional)")
         parser.add_argument("-delete", required=False, choices=["full"], help="Eliminar particion (opcional)")
         args = parser.parse_args(split_args)
 

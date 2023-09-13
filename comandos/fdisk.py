@@ -108,7 +108,8 @@ def execute_fdisk(args):
                 
                 #verificar si no sobrepasa el tamaño del disco
                 espacio_ocupado = verificar_espacio_ocupado(args.path)
-                if espacio_ocupado + bytes_agregar <= mbrDisco.tamano:
+                condicion = espacio_ocupado + bytes_agregar
+                if condicion <= mbrDisco.tamano and condicion > 0:
                     #buscar la particion a la que se la va a modificar el size
                     if str(mbrDisco.particion1.get_name()) == nombre_particion:
                         mbrDisco.particion1.set_s(int(mbrDisco.particion1.s) + bytes_agregar)
@@ -159,18 +160,31 @@ def execute_fdisk(args):
                     obtenerDatosDisco(args.path, 0, mbrDisco)
 
                     #verificar si hay espacio en el disco
+                    bytesSize = convertir_bytes(args.size, args.unit) 
                     espacio_ocupado = verificar_espacio_ocupado(args.path)
-                    if espacio_ocupado + args.size <= mbrDisco.tamano:
-                        if mbrDisco.particion1.s == 0:
-                            settearDatosParticion(mbrDisco, args.path, 1, args.name, args.fit, args.type, args.unit, args.size)
-                        elif mbrDisco.particion2.s == 0:
-                            settearDatosParticion(mbrDisco, args.path, 2, args.name, args.fit, args.type, args.unit, args.size)
-                        elif mbrDisco.particion3.s == 0:
-                            settearDatosParticion(mbrDisco, args.path, 3, args.name, args.fit, args.type, args.unit, args.size)
-                        elif mbrDisco.particion4.s == 0:
-                            settearDatosParticion(mbrDisco, args.path, 4, args.name, args.fit, args.type, args.unit, args.size)
+                    if espacio_ocupado + bytesSize <= mbrDisco.tamano:
+                        if args.type != "l":
+                            if mbrDisco.particion1.s == 0:
+                                settearDatosParticion(mbrDisco, args.path, 1, args.name, args.fit, args.type, args.unit, args.size)
+                            elif mbrDisco.particion2.s == 0:
+                                settearDatosParticion(mbrDisco, args.path, 2, args.name, args.fit, args.type, args.unit, args.size)
+                            elif mbrDisco.particion3.s == 0:
+                                settearDatosParticion(mbrDisco, args.path, 3, args.name, args.fit, args.type, args.unit, args.size)
+                            elif mbrDisco.particion4.s == 0:
+                                settearDatosParticion(mbrDisco, args.path, 4, args.name, args.fit, args.type, args.unit, args.size)
+                            else:
+                                print("Ya no existen particiones libres")
                         else:
-                            print("Ya no existen particiones libres")
+                            if mbrDisco.particion1.type == b'e':
+                                settearDatosParticion(mbrDisco, args.path, 1, args.name, args.fit, args.type, args.unit, args.size)
+                            elif mbrDisco.particion2.type == b'e':
+                                settearDatosParticion(mbrDisco, args.path, 2, args.name, args.fit, args.type, args.unit, args.size)
+                            elif mbrDisco.particion3.type == b'e':
+                                settearDatosParticion(mbrDisco, args.path, 3, args.name, args.fit, args.type, args.unit, args.size)
+                            elif mbrDisco.particion4.type == b'e':
+                                settearDatosParticion(mbrDisco, args.path, 4, args.name, args.fit, args.type, args.unit, args.size)
+                            else:
+                                print("No existe una particion extendida")
 
                         mbrActualizado = Mbr()
                         obtenerDatosDisco(args.path, 0, mbrActualizado)
@@ -220,9 +234,6 @@ def caseLogica(rutaDisco, fitParticion, sizeParticion, nombreParticion):
         size = mbr.particion4.s
 
     #obteniendo el ebr
-    print("size", size)
-    print("puntero", puntero)
-    print("condicion", inicio + size)
     while puntero < inicio + size:
         ebrActual = Ebr()
         obtenerDatosDisco(rutaDisco, puntero, ebrActual)
@@ -528,3 +539,13 @@ def actualizar_start_particiones(rutaDisco):
         mbr.particion4.set_start(mbr_espacio + mbr.particion1.s + mbr.particion2.s + mbr.particion3.s)
 
     actualizarParticionesMBR(rutaDisco, mbr)
+
+def convertir_bytes(size, unit):
+    if unit == "b":
+        bytes = size
+    elif unit == "k":
+        bytes = size * 1024
+    elif unit == "m":
+        bytes= size * 1024 * 1024
+
+    return bytes

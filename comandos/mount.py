@@ -10,6 +10,7 @@ particiones_montadas = []
 def execute_mount(args):
     if os.path.exists(args.path):
         mbrDisco = Mbr()
+        montada = False
 
         #obteniendo datos del mbr
         obtenerDatosDisco(args.path, 0, mbrDisco)
@@ -22,7 +23,14 @@ def execute_mount(args):
         if str(mbrDisco.particion1.get_name()) == nombre_buscar:
             numero_particion = "1"
             id_particion = digitos_carnet + numero_particion + nombre_disco
-            if id_particion in particiones_montadas:
+            
+            #recorrer particiones montadas para verificar que no este montada
+            for particion in particiones_montadas:
+                if particion[0] == id_particion:
+                    montada = True
+                    break
+                
+            if montada == True:
                 print("Error: particion ya montada")
             else:
                 particion_a_montar = [id_particion, mbrDisco.particion1, args.path]

@@ -1,0 +1,15 @@
+Mkdisk -size=50 -unit=M -path=/home/aldo/archivos/Disco1.dsk -fit=FF                
+Mkdisk -unit=k -size=51200 -path=/home/aldo/archivos/Disco2.dsk -fit=BF               
+mkDisk -size=10 -path=/home/aldo/archivos/Disco3.dsk                                  
+mkdisk -size=51200 -path="/home/aldo/archivos/mis archivos/Disco4.dsk" -unit=K         
+mkDisk -size=20 -path="/home/aldo/archivos/mis archivos/Disco5.dsk" -unit=M -fit=WF    
+Mkdisk -size=50 -unit=M -path=/home/aldo/archivos/Disco6.dsk -fit=FF                   
+Mkdisk -size=50 -unit=M -path=/home/aldo/archivos/Disco7.dsk -fit=FF                  
+mkdisk -size=51200 -path="/home/aldo/archivos/mis archivos/Disco8.dsk" -unit=K         
+mkdisk -size=51200 -path="/home/aldo/archivos/mis archivos/Disco9.dsk" -unit=K         
+
+rmdisk -path="/home/aldo/archivos/Discos/mis archivos/Disco6.dsk"
+rmdisk -path=/home/aldo/archivos/Disco6.dsk
+rmdisk -path=/home/aldo/archivos/Disco7.dsk
+rmdisk -path="/home/aldo/archivos/mis archivos/Disco8.dsk"
+rmdisk -path="/home/aldo/archivos/mis archivos/Disco9.dsk"
