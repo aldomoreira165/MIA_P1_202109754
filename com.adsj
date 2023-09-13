@@ -1,0 +1,6 @@
+mkdisk -path=./Disco1.dsk -unit=K -size=3000
+fdisk -size=10000 -unit=B -path=./disco1.dsk -name=particionUno
+mount -path=./disco1.dsk -name=particionUno
+mkfs -id=541disco1 -type=full
+login -user=root -pass=1234 -id=541disco1
+rep -name=sb -path=./reportes/prueba.png -id=541disco1

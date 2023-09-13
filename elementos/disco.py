@@ -45,7 +45,16 @@ def generarDatosDisco(archivo, desplazamiento, objeto):
         archivo.seek(desplazamiento)
         archivo.write(datos)
     except Exception as e:
-        print(f"Error en escritura disco: {e}")
+        print(f"Error en escritura disco 1: {e}")
+
+def generarDatosDiscoNormal(archivo, desplazamiento, objeto):
+    try:
+        datos = objeto
+        archivo.seek(desplazamiento)
+        archivo.write(datos)
+    except Exception as e:
+        print(f"Error en escritura disco 2: {e}")
+
 
 def obtenerDatosDisco(nombre, desplazamiento,objeto):
     with open(nombre, "rb") as fileOpen:

@@ -3,13 +3,64 @@ from elementos.disco import *
 from elementos.mbr import Mbr
 from comandos.mount import particiones_montadas
 from elementos.ebr import Ebr
+from elementos.superbloque import Superblock
 
 def execute_rep(args):
     if args.name == "mbr":
         reporte_mbr(args.path, args.id)
     elif args.name == "disk":
         reporte_disk(args.path, args.id)
+    elif args.name == "sb":
+        reporte_sb(args.path, args.id)
 
+#sb
+def reporte_sb(ruta, id):
+    #abrir disco y obtener particion
+    try:
+        #buscar id en particiones montadas
+        elemento_encontrado = None
+
+        for elemento in particiones_montadas:
+            if elemento[0] == id:
+                elemento_encontrado = elemento
+                break
+
+        if elemento_encontrado == None:
+            print("No se encontro la particion")
+        else:
+            mbrDisco = Mbr()
+            obtenerDatosDisco(elemento_encontrado[2], 0, mbrDisco)
+            superBloque = Superblock()
+            obtenerDatosDisco(elemento_encontrado[2], mbrDisco.particion1.start, superBloque)
+            dot = "digraph sb{\n"
+            dot += "node [shape=plaintext]\n"
+            dot += "table [label=<\n"
+            dot += "<table border=\"1\" cellborder=\"1\" cellspacing=\"0\">\n"
+            dot += "<tr><td colspan=\"3\" bgcolor=\"yellow\">Reporte de Superbloque</td></tr>\n"
+            dot += f"<tr><td bgcolor=\"lightgray\">s_filesystem_type</td><td bgcolor=\"lightgray\">{superBloque.filesystem_type}</td></tr>\n"
+            dot += f"<tr><td bgcolor=\"lightgray\">s_inodes_count</td><td bgcolor=\"lightgray\">{superBloque.inodes_count}</td></tr>\n"
+            dot += f"<tr><td bgcolor=\"lightgray\">s_blocks_count</td><td bgcolor=\"lightgray\">{superBloque.blocks_count}</td></tr>\n"
+            dot += f"<tr><td bgcolor=\"lightgray\">s_free_blocks_count</td><td bgcolor=\"lightgray\">{superBloque.free_blocks_count}</td></tr>\n"
+            dot += f"<tr><td bgcolor=\"lightgray\">s_free_inodes_count</td><td bgcolor=\"lightgray\">{superBloque.free_inodes_count}</td></tr>\n"
+            dot += f"<tr><td bgcolor=\"lightgray\">s_mtime</td><td bgcolor=\"lightgray\">{superBloque.mtime}</td></tr>\n"
+            dot += f"<tr><td bgcolor=\"lightgray\">s_umtime</td><td bgcolor=\"lightgray\">{superBloque.umtime}</td></tr>\n"
+            dot += f"<tr><td bgcolor=\"lightgray\">s_mnt_count</td><td bgcolor=\"lightgray\">{superBloque.mcount}</td></tr>\n"
+            dot += f"<tr><td bgcolor=\"lightgray\">s_magic</td><td bgcolor=\"lightgray\">{superBloque.magic}</td></tr>\n"
+            dot += f"<tr><td bgcolor=\"lightgray\">s_inode_size</td><td bgcolor=\"lightgray\">{superBloque.inode_size}</td></tr>\n"
+            dot += f"<tr><td bgcolor=\"lightgray\">s_block_size</td><td bgcolor=\"lightgray\">{superBloque.block_size}</td></tr>\n"
+            dot += f"<tr><td bgcolor=\"lightgray\">s_first_ino</td><td bgcolor=\"lightgray\">{superBloque.first_ino}</td></tr>\n"
+            dot += f"<tr><td bgcolor=\"lightgray\">s_first_blo</td><td bgcolor=\"lightgray\">{superBloque.first_blo}</td></tr>\n"
+            dot += f"<tr><td bgcolor=\"lightgray\">s_bm_inode_start</td><td bgcolor=\"lightgray\">{superBloque.bm_inode_start}</td></tr>\n"
+            dot += f"<tr><td bgcolor=\"lightgray\">s_bm_block_start</td><td bgcolor=\"lightgray\">{superBloque.bm_block_start}</td></tr>\n"
+            dot += f"<tr><td bgcolor=\"lightgray\">s_inode_start</td><td bgcolor=\"lightgray\">{superBloque.inode_start}</td></tr>\n"
+            dot += f"<tr><td bgcolor=\"lightgray\">s_block_start</td><td bgcolor=\"lightgray\">{superBloque.block_start}</td></tr>\n"
+            dot += "</table>\n"
+            dot += ">];\n"
+            dot += "}"
+
+            guardarImagen(ruta, dot)
+    except Exception as e:
+        print(f"Error: {e}")
 
 #disk
 def reporte_disk(ruta, id):

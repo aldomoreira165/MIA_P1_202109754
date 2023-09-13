@@ -44,3 +44,4 @@ fdisk -add=200 -unit=B -path=./disco.dsk -name=particionUno
 rep -name=mbr -path=./disco.dsk -id=particion
 
 fdisk -type=l -path=./Disco.dsk -unit=K -name=Particionl1 -size=300
+execute -path=./com.adsj

@@ -6,6 +6,7 @@ from funciones.utilities import printConsole,printError
 from comandos.fdisk import *
 from comandos.mkdisk import *
 from comandos.mkfs import *
+from comandos.login import *
 from comandos.mount import *
 from comandos.rmdisk import *
 from comandos.unmount import *
@@ -60,6 +61,10 @@ def AnalyzeType(entry):
                 print(" ------ Se detecto mkfs ------ ")
                 fn_mkfs(split_args)
                 print(" ------ Termino mkfs ------ ")
+            elif (command == "login"):
+                print(" ------ Se detecto login ------ ")
+                fn_login(split_args)
+                print(" ------ Termino login ------ ")
             elif (command == "pause"):
                 print(" ------ Se detecto pause ------ ")
                 input("Presione enter para continuar...")
@@ -69,6 +74,19 @@ def AnalyzeType(entry):
                 fn_rep(split_args)
                 print(" ------ Termino rep ------ ")
     except Exception as e: pass
+
+def fn_login(split_args):
+    try:
+        parser = argparse.ArgumentParser(description="Parámetros")
+        parser.add_argument("-user", required=True, help="Usuario")
+        parser.add_argument("-pass", required=True, help="Contraseña")
+        parser.add_argument("-id", required=True, help="Id de la particion montada")
+        args = parser.parse_args(split_args)
+
+        execute_login(args)
+
+    except SystemExit: printError("Análisis de argumentos")
+    except Exception as e: printError(str(e))
 
 def fn_execute(split_args):
     try:
@@ -161,7 +179,7 @@ def fn_mkfs(split_args):
         parser = argparse.ArgumentParser(description="Parámetros")
         parser.add_argument("-id", required=True, help="Id de la particion a formatear")
         parser.add_argument("-type", required=False, choices=["full"], default="full", help="Tipo de formateo")
-        parser.add_argument("-fs", required=False, choices=["2fs", "3fs"], default="3fs", help="Tipo de sistema de archivos")
+        parser.add_argument("-fs", required=False, choices=["2fs", "3fs"], default="2fs", help="Tipo de sistema de archivos")
         args = parser.parse_args(split_args)
 
         execute_mkfs(args)

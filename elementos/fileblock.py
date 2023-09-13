@@ -6,7 +6,7 @@ const = '64s'
 class Fileblock(ctypes.Structure):
 
     _fields_ = [
-        ('b_content', ctypes.c_char*64),
+        ('b_content', ctypes.c_char*64), #array con el contenido del archivo
     ]
 
     def __init__(self):

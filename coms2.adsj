@@ -13,3 +13,10 @@ mount -path=./disco.dsk -name=particionUno
 unmount -id=544disco
 rep -name=mbr -path=/home/aldo/graficas/mbr/unidad.png -id=541disco
 rep -name=disk -path=/home/aldo/graficas/disk/unidad.png -id=541disco
+
+#probando mkfs
+mkdisk -path=./Disco.dsk -unit=K -size=3000
+fdisk -size=200 -unit=B -path=./disco.dsk -name=particionUno
+mount -path=./disco.dsk -name=particionUno
+mkfs -id=541disco -type=full
+login -user=root -pass=1234 -id=541disco

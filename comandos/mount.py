@@ -1,7 +1,7 @@
 import os
 from elementos.superbloque import *
 from elementos.inodo import *
-from elementos.bloque_archivos import *
+from elementos.fileblock import *
 from elementos.mbr import Mbr
 from elementos.disco import *
 
