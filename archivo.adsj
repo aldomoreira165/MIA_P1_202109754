@@ -9,19 +9,28 @@ mkdisk -param=x -size=30 -path=/home/aldo/archivos/Disco.dsk
 
 //funciona
 #CREACION DE DISCOS---------------------------------------------------
-Mkdisk -size=50 -unit=M -path=/home/aldo/archivos/Disco1.dsk -fit=FF                   # 50M
-Mkdisk -unit=k -size=51200 -path=/home/aldo/archivos/Disco2.dsk -fit=BF                # 50M
-mkDisk -size=10 -path=/home/aldo/archivos/Disco3.dsk                                   # 10M
-mkdisk -size=51200 -path="/home/aldo/archivos/mis archivos/Disco4.dsk" -unit=K         # 50M
-mkDisk -size=20 -path="/home/aldo/archivos/mis archivos/Disco5.dsk" -unit=M -fit=WF    # 20M
-Mkdisk -size=50 -unit=M -path=/home/aldo/archivos/Disco6.dsk -fit=FF                   # 50M X
-Mkdisk -size=50 -unit=M -path=/home/aldo/archivos/Disco7.dsk -fit=FF                   # 50M X
-mkdisk -size=51200 -path="/home/aldo/archivos/mis archivos/Disco8.dsk" -unit=K         # 50M X
-mkdisk -size=51200 -path="/home/aldo/archivos/mis archivos/Disco9.dsk" -unit=K         # 50M X
+# 50M
+Mkdisk -size=50 -unit=M -path=/home/aldo/archivos/Disco1.dsk -fit=FF  
+# 50M                
+Mkdisk -unit=k -size=51200 -path=/home/aldo/archivos/Disco2.dsk -fit=BF
+# 10M                
+mkDisk -size=10 -path=/home/aldo/archivos/Disco3.dsk   
+# 50M                               
+mkdisk -size=51200 -path="/home/aldo/archivos/mis archivos/Disco4.dsk" -unit=K  
+# 20M       
+mkDisk -size=20 -path="/home/aldo/archivos/mis archivos/Disco5.dsk" -unit=M -fit=WF  
+# 50M X  
+Mkdisk -size=50 -unit=M -path=/home/aldo/archivos/Disco6.dsk -fit=FF   
+# 50M X                
+Mkdisk -size=50 -unit=M -path=/home/aldo/archivos/Disco7.dsk -fit=FF                   
+# 50M X
+mkdisk -size=51200 -path="/home/aldo/archivos/mis archivos/Disco8.dsk" -unit=K        
+# 50M X
+mkdisk -size=51200 -path="/home/aldo/archivos/mis archivos/Disco9.dsk" -unit=K 
 
-//funciona
 #ELIMINACION DE DISCOS---------------------------------------------------
-rmdisk -path="/home/aldo/archivos/Discos/mis archivos/Disco6.dsk" #ERR RUTA NO ENCONTRADA
+#ERR RUTA NO ENCONTRADA
+rmdisk -path="/home/aldo/archivos/Discos/mis archivos/Disco6.dsk" 
 rmdisk -path=/home/aldo/archivos/Disco6.dsk
 rmdisk -path=/home/aldo/archivos/Disco7.dsk
 rmdisk -path="/home/aldo/archivos/mis archivos/Disco8.dsk"
@@ -30,23 +39,36 @@ rmdisk -path="/home/aldo/archivos/mis archivos/Disco9.dsk"
 
 #CREACION DE PARTICIONES---------------------------------------------------
 #DISCO 1
-fdisk -type=P -unit=b -name=Part0 -size=10485760 -path="/home/aldo/archivos/mis archivos/Disco1.dsk" -fit=BF # ERR RUTA NO ENCONTRADA
-fdisk -type=P -unit=b -name=Part1 -size=10485760 -path=/home/aldo/archivos/Disco1.dsk -fit=BF # 10M
-fdisk -type=P -unit=k -name=Part2 -size=10240 -path=/home/aldo/archivos/Disco1.dsk -fit=BF    # 10M
-fdisk -type=P -unit=M -name=Part3 -size=10 -path=/home/aldo/archivos/Disco1.dsk -fit=BF       # 10M
-fdisk -type=P -unit=b -name=Part4 -size=10485760 -path=/home/aldo/archivos/Disco1.dsk -fit=BF # 10M
-fdisk -type=P -unit=b -name=Part5 -size=10485760 -path=/home/aldo/archivos/Disco1.dsk -fit=BF #ERR PARTICION 5
+# ERR RUTA NO ENCONTRADA
+fdisk -type=P -unit=b -name=Part0 -size=10485760 -path="/home/aldo/archivos/mis archivos/Disco1.dsk" -fit=BF 
+# 10M
+fdisk -type=P -unit=b -name=Part1 -size=10485760 -path=/home/aldo/archivos/Disco1.dsk -fit=BF 
+# 10M
+fdisk -type=P -unit=k -name=Part2 -size=10240 -path=/home/aldo/archivos/Disco1.dsk -fit=BF 
+# 10M   
+fdisk -type=P -unit=M -name=Part3 -size=10 -path=/home/aldo/archivos/Disco1.dsk -fit=BF 
+# 10M      
+fdisk -type=P -unit=b -name=Part4 -size=10485760 -path=/home/aldo/archivos/Disco1.dsk -fit=BF 
+# 10M
+#ERR PARTICION 5
+fdisk -type=P -unit=b -name=Part5 -size=10485760 -path=/home/aldo/archivos/Disco1.dsk -fit=BF 
 # LIBRE DISCO 1: 50-4*10 = 10 -> 20%
 
-//aca no funciona cuando ya hay cuatro particiones
 #DISCO 2
-fdisk -type=L -unit=k -name=Part6 -size=10240 -path=/home/aldo/archivos/Disco2.dsk -fit=BF #ERRROR no hay una extendida
-fdisk -type=L -unit=k -name=Part7 -size=10240 -path=/home/aldo/archivos/Disco2.dsk -fit=BF #ERRROR no hay una extendida
-fDisk -type=P -unit=K -name=Part8 -size=10240 -path=/home/aldo/archivos/Disco2.dsk -fit=BF    # 10M
-fDisk -type=P -unit=m -name=Part9 -size=10 -path=/home/aldo/archivos/Disco2.dsk -fit=FF       # 10M
-fDisk -type=P -unit=K -name=Part10 -size=5120 -path=/home/aldo/archivos/Disco2.dsk -fit=WF    # 5M
-fdisk -type=E -unit=m -name=Part11 -size=20 -path=/home/aldo/archivos/Disco2.dsk            # 20M
-fdisk -type=L -unit=k -name=Part12 -size=1536 -path=/home/aldo/archivos/Disco2.dsk          # 1.5M
+#ERRROR no hay una extendida
+fdisk -type=L -unit=k -name=Part6 -size=10240 -path=/home/aldo/archivos/Disco2.dsk -fit=BF 
+#ERRROR no hay una extendida
+fdisk -type=L -unit=k -name=Part7 -size=10240 -path=/home/aldo/archivos/Disco2.dsk -fit=BF 
+# 10M
+fDisk -type=P -unit=K -name=Part8 -size=10240 -path=/home/aldo/archivos/Disco2.dsk -fit=BF 
+# 10M   
+fDisk -type=P -unit=m -name=Part9 -size=10 -path=/home/aldo/archivos/Disco2.dsk -fit=FF  
+# 5M     
+fDisk -type=P -unit=K -name=Part10 -size=5120 -path=/home/aldo/archivos/Disco2.dsk -fit=WF  
+ # 20M  
+fdisk -type=E -unit=m -name=Part11 -size=20 -path=/home/aldo/archivos/Disco2.dsk  
+ # 1.5M         
+fdisk -type=L -unit=k -name=Part12 -size=1536 -path=/home/aldo/archivos/Disco2.dsk         
 fdisk -type=L -unit=k -name=Part13 -size=1536 -path=/home/aldo/archivos/Disco2.dsk -fit=BF
 fdisk -type=L -unit=k -name=Part14 -size=1536 -path=/home/aldo/archivos/Disco2.dsk -fit=FF
 fdisk -type=L -unit=k -name=Part15 -size=1536 -path=/home/aldo/archivos/Disco2.dsk -fit=BF
@@ -62,50 +84,75 @@ fdisk -type=L -unit=k -name=Part24 -size=1536 -path=/home/aldo/archivos/Disco2.d
 # LIBRE DISCO 2: 50-45 = 5 -> 10%
 # LIBRE EXTENDIDA 2: 20-13*1.5 = 0.5 -> 2.5% (por los EBR deberia ser menos)
 
-//funciona
 #DISCO 3
-fdisk -type=P -unit=m -name=Part25 -size=20 -path=/home/aldo/archivos/Disco3.dsk    # 20M #ERR FALTA ESPACIO
-fdisk -type=P -unit=m -name=Part26 -size=4 -path=/home/aldo/archivos/Disco3.dsk     #4M
-fdisk -type=P -unit=m -name=Part27 -size=4 -path=/home/aldo/archivos/Disco3.dsk     #4M
-fdisk -type=P -unit=m -name=Part28 -size=1 -path=/home/aldo/archivos/Disco3.dsk     #1M
+# 20M #ERR FALTA ESPACIO
+fdisk -type=P -unit=m -name=Part25 -size=20 -path=/home/aldo/archivos/Disco3.dsk  
+#4M  
+fdisk -type=P -unit=m -name=Part26 -size=4 -path=/home/aldo/archivos/Disco3.dsk 
+#4M    
+fdisk -type=P -unit=m -name=Part27 -size=4 -path=/home/aldo/archivos/Disco3.dsk
+#1M     
+fdisk -type=P -unit=m -name=Part28 -size=1 -path=/home/aldo/archivos/Disco3.dsk     
 #LIBRE DISCO 3: 10-9= 1 -> 10%
 
-//funciona
 #ELIMINAR Y AGREGAR ESPACIO DISCO 3
-fdisk -add=-1000 -unit=m -path=/home/aldo/archivos/Disco3.dsk -name=Part26 # ERR SIZE NEGATIVO
-fdisk -add=1000 -unit=m -path=/home/aldo/archivos/Disco3.dsk -name=Part26 # ERR PARTICION NO TIENE ESPACIO
-fdisk -add=-2 -unit=m -path=/home/aldo/archivos/Disco3.dsk -name=Part26 # 4-2= 2M
-fdisk -delete=full -name=Part27 -path=/home/aldo/archivos/Disco3.dsk # 0
-fdisk -add=4 -unit=m -path=/home/aldo/archivos/Disco3.dsk -name=Part28 # 4+1= 5M
+# ERR SIZE NEGATIVO
+fdisk -add=-1000 -unit=m -path=/home/aldo/archivos/Disco3.dsk -name=Part26 
+# ERR PARTICION NO TIENE ESPACIO
+fdisk -add=1000 -unit=m -path=/home/aldo/archivos/Disco3.dsk -name=Part26 
+# 4-2= 2M
+fdisk -add=-2 -unit=m -path=/home/aldo/archivos/Disco3.dsk -name=Part26 
+# 0
+fdisk -delete=full -name=Part27 -path=/home/aldo/archivos/Disco3.dsk 
+# 4+1= 5M
+fdisk -add=4 -unit=m -path=/home/aldo/archivos/Disco3.dsk -name=Part28 
 #LIBRE DISCO 3: 10-7= 3 -> 30%
 
-//funciona
 #DISCO 5
-fdisk -type=E -unit=k -name=Part29 -size=5120 -path="/home/aldo/archivos/mis archivos/Disco5.dsk" -fit=BF # 5MB
-fdisk -type=L -unit=k -name=Part30 -size=1024 -path="/home/aldo/archivos/mis archivos/Disco5.dsk" -fit=BF # 1MB
-fdisk -type=P -unit=k -name=Part31 -size=5120 -path="/home/aldo/archivos/mis archivos/Disco5.dsk" -fit=BF # 5MB
-fdisk -type=L -unit=k -name=Part32 -size=1024 -path="/home/aldo/archivos/mis archivos/Disco5.dsk" -fit=BF # 1MB
-fdisk -type=L -unit=k -name=Part33 -size=1024 -path="/home/aldo/archivos/mis archivos/Disco5.dsk" -fit=BF # 1MB
-fdisk -type=L -unit=k -name=Part34 -size=1024 -path="/home/aldo/archivos/mis archivos/Disco5.dsk" -fit=BF # 1MB
+# 5MB
+fdisk -type=E -unit=k -name=Part29 -size=5120 -path="/home/aldo/archivos/mis archivos/Disco5.dsk" -fit=BF 
+# 1MB
+fdisk -type=L -unit=k -name=Part30 -size=1024 -path="/home/aldo/archivos/mis archivos/Disco5.dsk" -fit=BF 
+# 5MB
+fdisk -type=P -unit=k -name=Part31 -size=5120 -path="/home/aldo/archivos/mis archivos/Disco5.dsk" -fit=BF 
+# 1MB
+fdisk -type=L -unit=k -name=Part32 -size=1024 -path="/home/aldo/archivos/mis archivos/Disco5.dsk" -fit=BF 
+# 1MB
+fdisk -type=L -unit=k -name=Part33 -size=1024 -path="/home/aldo/archivos/mis archivos/Disco5.dsk" -fit=BF
+# 1MB 
+fdisk -type=L -unit=k -name=Part34 -size=1024 -path="/home/aldo/archivos/mis archivos/Disco5.dsk" -fit=BF 
 # LIBRE DISCO 5: 20-10 = 5 -> 50%
 # LIBRE EXTENDIDA 2: 5-4 = 1 -> 20% (por los EBR deberia ser menos)
 
 #MONTAR PARTICIONES---------------------------------------------------
 #DISCO X
-mount -path=/home/aldo/archivos/Disco1.dsk -name=Part5 #ERR PARTICION NO EXISTE
+#ERR PARTICION NO EXISTE
+mount -path=/home/aldo/archivos/Disco1.dsk -name=Part5 
 #DISCO 1
-mount -path=/home/aldo/archivos/Disco1.dsk -name=Part1 #191a -> id1 -> 541disco1
-mount -path=/home/aldo/archivos/Disco1.dsk -name=Part2 #191b -> id2 -> 542disco1
-mount -path=/home/aldo/archivos/Disco1.dsk -name=Part1 #ERR PARTICION YA MONTADA
+#191a -> id1 -> 541disco1
+mount -path=/home/aldo/archivos/Disco1.dsk -name=Part1 
+#191b -> id2 -> 542disco1
+mount -path=/home/aldo/archivos/Disco1.dsk -name=Part2 
+#ERR PARTICION YA MONTADA
+mount -path=/home/aldo/archivos/Disco1.dsk -name=Part1
+
 #DISCO 2
-//verificar si se puede montar particion extendida
-mount -path=/home/aldo/archivos/Disco2.dsk -name=Part11 #ERR MONTAR EXTENDIDA
-mount -path=/home/aldo/archivos/Disco2.dsk -name=Part12 #192a -> id3 -> cambiar el 192a por el ID que a ustedes les genera
-mount -path=/home/aldo/archivos/Disco2.dsk -name=Part13 #192b -> id4 -> cambiar el 192b por el ID que a ustedes les genera
+#ERR MONTAR EXTENDIDA
+mount -path=/home/aldo/archivos/Disco2.dsk -name=Part11 
+#192a -> id3 -> cambiar el 192a por el ID que a ustedes les genera
+mount -path=/home/aldo/archivos/Disco2.dsk -name=Part12 
+#192b -> id4 -> cambiar el 192b por el ID que a ustedes les genera
+mount -path=/home/aldo/archivos/Disco2.dsk -name=Part13
+mount -path=/home/aldo/archivos/Disco2.dsk -name=Part8
+mount -path=/home/aldo/archivos/Disco2.dsk -name=Part9
+
 #DISCO 3
-mount -path=/home/aldo/archivos/Disco3.dsk -name=Part26 #193a -> id5 -> 541disco3
+#193a -> id5 -> 541disco3
+mount -path=/home/aldo/archivos/Disco3.dsk -name=Part26 
+
 #DISCO 5
-mount -path="/home/aldo/archivos/mis archivos/Disco5.dsk" -name=Part31 #194a -> id6 -> 542disco5
+#194a -> id6 -> 542disco5
+mount -path="/home/aldo/archivos/mis archivos/Disco5.dsk" -name=Part31 
 
 
 #DESMONTAR PARTICIONES---------------------------------------------------
@@ -113,12 +160,12 @@ mount -path="/home/aldo/archivos/mis archivos/Disco5.dsk" -name=Part31 #194a -> 
 unmount -id=IDx 
 #DISCO 1
 #-> id1
-unmount -id=191a 
+unmount -id=541disco1
 #ERR PARTICION YA DESMONTADA -> id1
-unmount -id=191a 
+unmount -id=541disco1
 #DISCO 2
 #-> id4
-unmount -id=192b 
+unmount -id=541disco2 
 
 
 #REPORTES---------------------------------------------------
@@ -131,9 +178,12 @@ rep -id=542disco1 -Path=/home/aldo/archivos/reports/reporte2.jpg -name=disk
 rep -id=542disco1 -Path=/home/aldo/archivos/reports/reporte3.jpg -name=mbr 
 
 #DISCO 2
-rep -id=192b -Path=/home/aldo/archivos/reports/reporte4.jpg -name=mbr #ERR ID NO ENCONTRADO -> id4
-rep -id=192a -Path=/home/aldo/archivos/reports/reporte5.jpg -name=disk #-> id3
-rep -id=192a -Path=/home/aldo/archivos/reports/reporte6.jpg -name=mbr #-> id3
+#ERR ID NO ENCONTRADO -> id4
+rep -id=541disco2 -Path=/home/aldo/archivos/reports/reporte4.jpg -name=mbr 
+#-> id3
+rep -id=542disco2 -Path=/home/aldo/archivos/reports/reporte5.jpg -name=disk 
+#-> id3
+rep -id=542disco2 -Path=/home/aldo/archivos/reports/reporte6.jpg -name=mbr 
 
 #DISCO 3
 #ERR ID NO ENCONTRADO

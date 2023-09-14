@@ -33,40 +33,52 @@ def execute_mount(args):
             if montada == True:
                 print("Error: particion ya montada")
             else:
-                particion_a_montar = [id_particion, mbrDisco.particion1, args.path]
-                particiones_montadas.append(particion_a_montar)
-                print("Particion montada correctamente")
-                print("Particiones montadas: ", particiones_montadas)
+                if mbrDisco.particion1.type != b'e':
+                    particion_a_montar = [id_particion, mbrDisco.particion1, args.path]
+                    particiones_montadas.append(particion_a_montar)
+                    print("Particion montada correctamente")
+                    print("Particiones montadas: ", particiones_montadas)
+                else:
+                    print("Error: particion extendida")
         elif str(mbrDisco.particion2.get_name()) == nombre_buscar: 
             numero_particion = "2"
             id_particion = digitos_carnet + numero_particion + nombre_disco
             if id_particion in particiones_montadas:
                 print("Error: particion ya montada")
             else:
-                particion_a_montar = [id_particion, mbrDisco.particion2, args.path]
-                particiones_montadas.append(particion_a_montar)
-                print("Particion montada correctamente")
-                print("Particiones montadas: ", particiones_montadas)
+                if mbrDisco.particion2.type != b'e':
+                    particion_a_montar = [id_particion, mbrDisco.particion2, args.path]
+                    particiones_montadas.append(particion_a_montar)
+                    print("Particion montada correctamente")
+                    print("Particiones montadas: ", particiones_montadas)
+                else:
+                    print("Error: particion extendida")
         elif str(mbrDisco.particion3.get_name()) == nombre_buscar:
             numero_particion = "3"
             id_particion = digitos_carnet + numero_particion + nombre_disco
             if id_particion in particiones_montadas:
                 print("Error: particion ya montada")
             else:
-                particion_a_montar = [id_particion, mbrDisco.particion3, args.path]
-                particiones_montadas.append(particion_a_montar)
-                print("Particion montada correctamente")
-                print("Particiones montadas: ", particiones_montadas)
+                if mbrDisco.particion3.type != b'e':  
+                    particion_a_montar = [id_particion, mbrDisco.particion3, args.path]
+                    particiones_montadas.append(particion_a_montar)
+                    print("Particion montada correctamente")
+                    print("Particiones montadas: ", particiones_montadas)
+                else:
+                    print("Error: particion extendida")
         elif str(mbrDisco.particion4.get_name()) == nombre_buscar:
             numero_particion = "4"
             id_particion = digitos_carnet + numero_particion + nombre_disco
             if id_particion in particiones_montadas:
                 print("Error: particion ya montada")
             else:
-                particion_a_montar = [id_particion, mbrDisco.particion4, args.path]
-                particiones_montadas.append(particion_a_montar)
-                print("Particion montada correctamente")
-                print("Particiones montadas: ", particiones_montadas)
+                if mbrDisco.particion4.type != b'e':
+                    particion_a_montar = [id_particion, mbrDisco.particion4, args.path]
+                    particiones_montadas.append(particion_a_montar)
+                    print("Particion montada correctamente")
+                    print("Particiones montadas: ", particiones_montadas)
+                else:
+                    print("Error: particion extendida")
         else:
             print("Error: particion no encontrada")
 

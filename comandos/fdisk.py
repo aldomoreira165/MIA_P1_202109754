@@ -237,9 +237,7 @@ def caseLogica(rutaDisco, fitParticion, sizeParticion, nombreParticion):
     while puntero < inicio + size:
         ebrActual = Ebr()
         obtenerDatosDisco(rutaDisco, puntero, ebrActual)
-        print("ebr actual", ebrActual.display_info())
         if ebrActual.next == -1:
-            print("ebr vacio encontrado")
             break 
         else:  
             puntero += len(ebrActual.doSerialize()) + ebrActual.s
@@ -250,7 +248,6 @@ def caseLogica(rutaDisco, fitParticion, sizeParticion, nombreParticion):
     ebrActual.set_infomation('0', fitParticion, part_start, sizeParticion, part_next, nombreParticion)
     
     with open(rutaDisco, "rb+") as discoAbierto:
-        print("fue aca")
         generarDatosDisco(discoAbierto, puntero, ebrActual)
 
     with open(rutaDisco, "rb+") as discoAbierto:
@@ -262,7 +259,6 @@ def caseLogica(rutaDisco, fitParticion, sizeParticion, nombreParticion):
             ebrUltimo = Ebr()
             startNext = part_next + len(ebrUltimo.doSerialize())
             ebrUltimo.set_infomation('0', '0', startNext, -1, -1, "noName")
-            print("o fue aca")
             generarDatosDisco(discoAbierto, part_next, ebrUltimo)
 
 #particiones extendidas
