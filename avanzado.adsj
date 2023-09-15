@@ -1,0 +1,39 @@
+#ENTRADA SEGUNDA PARTE MIA
+#Seccion N - Sergie Arizandieta
+#2S 2023
+#CAMBIAR /home/serchiboi -> POR SU USUARIO EJ ->  /home/SU_USER 
+#CAMBIAR LOS IDS
+
+#CREACION DE DISCOS------------------------------------------------
+Mkdisk -size=20 -unit=m -path=/home/aldo/archivos/Discos/Disco1.dsk
+Mkdisk -size=20 -unit=m -path=/home/aldo/archivos/Discos/Disco2.dsk
+
+#CREACION DE PARTICION------------------------------------------------
+fdisk -type=P -unit=K -name=Part1 -size=7680 -path=/home/aldo/archivos/Discos/Disco1.dsk -fit=BF
+fdisk -type=P -unit=K -name=Part1 -size=7680 -path=/home/aldo/archivos/Discos/Disco2.dsk -fit=BF
+
+#MOUNT------------------------------------------------
+#191a -> id1 -> 541disco1
+mount -path=/home/aldo/archivos/Discos/Disco1.dsk -name=Part1 
+#192a -> id2 -> 541disco2
+mount -path=/home/aldo/archivos/Discos/Disco2.dsk -name=Part1 
+
+#CREACION DE SISTEMA DE ARCHIVOS------------------------------------------------
+mkfs -type=full -id=541disco1 -fs=2fs
+
+#EXT2------------------------------------------------
+#------------------------REPORTES 1----------------
+rep -id=541disco1 -path="/home/aldo/archivos/reportes/reporte1_sb.jpg" -name=sb
+
+pause
+mkdisk -param=x #ERR
+
+#LOGIN------------------------------------------------
+login -user=root -pass=123 -id=541disco1 
+
+login -user=root -pass=123 -id=541disco1  #ERR SESION INICIADA
+
+logout
+
+pause
+mkdisk -param=x #ERR

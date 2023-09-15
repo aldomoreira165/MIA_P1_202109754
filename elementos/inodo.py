@@ -5,15 +5,15 @@ const = 'i i i 17s 17s 17s 15i 1s 3s'
 
 class Inode(ctypes.Structure):
     _fields_ = [
-        ("i_uid", ctypes.c_int), #identificador del usuario propietario del archivo
-        ("i_gid", ctypes.c_int), #identificador del grupo al que pertenece el archivo
-        ("i_size", ctypes.c_int), #tamaño del archivo en bytes
-        ("i_atime", ctypes.c_char * 17), #fecha en la que se leyo el inodo sin modificarlo
-        ("i_ctime", ctypes.c_char * 17), #fecha en la que se creo el inodo
-        ("i_mtime", ctypes.c_char * 17), #fecha en la que se modifico el inodo
-        ("i_block", ctypes.c_int * 15), #punteros a los bloques de datos
-        ("i_type", ctypes.c_char), #Indica si es archivo o carpera 0 = carpeta, 1 = archivo
-        ("i_perm", ctypes.c_char * 3) #permisos del archivo
+        ("i_uid", ctypes.c_int),
+        ("i_gid", ctypes.c_int),
+        ("i_size", ctypes.c_int),
+        ("i_atime", ctypes.c_char * 17),
+        ("i_ctime", ctypes.c_char * 17),
+        ("i_mtime", ctypes.c_char * 17),
+        ("i_block", ctypes.c_int * 15),
+        ("i_type", ctypes.c_char), # 0 = folder, 1 = file
+        ("i_perm", ctypes.c_char * 3)
     ]
 
     def __init__(self):

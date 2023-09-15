@@ -65,6 +65,10 @@ def AnalyzeType(entry):
                 print(" ------ Se detecto login ------ ")
                 fn_login(split_args)
                 print(" ------ Termino login ------ ")
+            elif (command == "logout"):
+                print(" ------ Se detecto logout ------ ")
+                fn_logout()
+                print(" ------ Termino logout ------ ")
             elif (command == "pause"):
                 print(" ------ Se detecto pause ------ ")
                 input("Presione enter para continuar...")
@@ -74,6 +78,13 @@ def AnalyzeType(entry):
                 fn_rep(split_args)
                 print(" ------ Termino rep ------ ")
     except Exception as e: pass
+
+def fn_logout():
+    try:
+        execute_logout()
+
+    except SystemExit: printError("Análisis de argumentos")
+    except Exception as e: printError(str(e))
 
 def fn_login(split_args):
     try:

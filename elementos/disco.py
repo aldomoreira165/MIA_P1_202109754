@@ -65,6 +65,14 @@ def obtenerDatosDisco(nombre, desplazamiento,objeto):
         except Exception as e:
             print(f"Error reading object err: {e}")
 
+def obtenerDatosDiscoAbierto(disco, desplazamiento, objeto):
+    try:
+        disco.seek(desplazamiento)
+        data = disco.read(len(objeto.doSerialize()))
+        objeto.doDeserialize(data)
+    except Exception as e:
+        print(f"Error reading object err: {e}")
+
 def obtener_total_bytes(size, unit):
     if unit == "k":
         return size * 1024

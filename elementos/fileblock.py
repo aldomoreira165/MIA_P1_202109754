@@ -6,7 +6,7 @@ const = '64s'
 class Fileblock(ctypes.Structure):
 
     _fields_ = [
-        ('b_content', ctypes.c_char*64), #array con el contenido del archivo
+        ('b_content', ctypes.c_char*64),
     ]
 
     def __init__(self):
@@ -30,4 +30,5 @@ class Fileblock(ctypes.Structure):
         return serialize
     
     def doDeserialize(self, data):
-        self.b_content = struct.unpack(const, data)
+        data = struct.unpack(const, data)
+        self.b_content = data[0]
